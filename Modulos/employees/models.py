@@ -60,13 +60,13 @@ class Employee(db.Model):
 
     # Identificación
     id = db.Column(db.Integer, primary_key=True)
-    identificacion = db.Column(db.String(50), unique=True)  # Identificación / número de empleado
+    identificacion = db.Column(db.BigInteger, unique=True)  # Identificación / número de empleado
 
     # Información Personal
     nombre = db.Column(db.String(120), nullable=False)
     fecha_nacimiento = db.Column(db.Date)
     correo = db.Column(db.String(120), unique=True)
-    contacto = db.Column(db.String(20))  # Teléfono
+    contacto = db.Column(db.BigInteger)  # Teléfono
 
     # Dirección
     direccion = db.Column(db.String(255))
@@ -87,7 +87,7 @@ class Employee(db.Model):
     tipo_contrato = db.relationship('ContractType', backref='employees')
     banco_id = db.Column(db.Integer, db.ForeignKey('banks.id'))
     banco = db.relationship('Bank', backref='employees')
-    numero_cuenta_bancaria = db.Column(db.String(50), unique=True)
+    numero_cuenta_bancaria = db.Column(db.BigInteger, unique=True)
     salario = db.Column(db.Float)
 
     # Información Adicional
@@ -99,8 +99,8 @@ class Employee(db.Model):
     genero = db.relationship('Gender', backref='employees')
     camisa_id = db.Column(db.Integer, db.ForeignKey('sizes.id'))
     camisa = db.relationship('Size', foreign_keys=[camisa_id], backref='employees_camisa')
-    pantalon = db.Column(db.String(10))
-    zapatos = db.Column(db.String(10))
+    pantalon = db.Column(db.Integer)
+    zapatos = db.Column(db.Integer)
     abrigo_id = db.Column(db.Integer, db.ForeignKey('sizes.id'))
     abrigo = db.relationship('Size', foreign_keys=[abrigo_id], backref='employees_abrigo')
     eps_id = db.Column(db.Integer, db.ForeignKey('eps_providers.id'))
@@ -115,7 +115,7 @@ class Employee(db.Model):
     # Sistema
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(200))
-    is_active = db.Column(db.Boolean, default=True)
+    is_active = db.Column(db.Integer, default=1)  # 0: inactivo, 1: activo, 2: licencia
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

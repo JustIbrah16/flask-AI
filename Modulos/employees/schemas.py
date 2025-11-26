@@ -18,11 +18,11 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
     id = fields.Integer(dump_only=True)
     
     # Información Personal
-    identificacion = fields.Str(required=True)
+    identificacion = fields.Integer(required=True)
     nombre = fields.Str(required=True)
     fecha_nacimiento = fields.Date(allow_none=True)
     correo = fields.Email(required=True)
-    contacto = fields.Str(allow_none=True)
+    contacto = fields.Integer(allow_none=True)
     
     # Dirección
     direccion = fields.Str(allow_none=True)
@@ -42,7 +42,7 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
     tipo_contrato = fields.Function(lambda obj: obj.tipo_contrato.name if obj.tipo_contrato else None, dump_only=True)
     banco_id = fields.Integer(allow_none=True)
     banco = fields.Function(lambda obj: obj.banco.name if obj.banco else None, dump_only=True)
-    numero_cuenta_bancaria = fields.Str(allow_none=True)
+    numero_cuenta_bancaria = fields.Integer(allow_none=True)
     salario = fields.Float(allow_none=True)
     
     # Información Adicional
@@ -56,8 +56,8 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
     # Tallas
     camisa_id = fields.Integer(allow_none=True)
     camisa = fields.Function(lambda obj: obj.camisa.name if obj.camisa else None, dump_only=True)
-    pantalon = fields.Str(allow_none=True)
-    zapatos = fields.Str(allow_none=True)
+    pantalon = fields.Integer(allow_none=True)
+    zapatos = fields.Integer(allow_none=True)
     abrigo_id = fields.Integer(allow_none=True)
     abrigo = fields.Function(lambda obj: obj.abrigo.name if obj.abrigo else None, dump_only=True)
     
@@ -74,7 +74,7 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
     # Sistema
     username = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
-    is_active = fields.Boolean(allow_none=True)
+    is_active = fields.Integer(allow_none=True)  # 0: inactivo, 1: activo, 2: licencia
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
 

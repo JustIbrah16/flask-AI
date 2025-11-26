@@ -58,9 +58,10 @@ class EmployeeService:
         if not emp:
             return None
         
-        emp.is_active = not emp.is_active
+        # Alternar entre 0 (inactivo) y 1 (activo)
+        emp.is_active = 0 if emp.is_active == 1 else 1
         # keep `estado` field in sync with is_active
-        emp.estado = 'activo' if emp.is_active else 'inactivo'
+        emp.estado = 'activo' if emp.is_active == 1 else 'inactivo'
         return EmployeeRepository.update(emp)
 
     @staticmethod
@@ -69,7 +70,7 @@ class EmployeeService:
         emp = EmployeeRepository.get_by_id(emp_id)
         if not emp:
             return None
-        emp.is_active = False
+        emp.is_active = 0  # 0: inactivo
         emp.estado = 'inactivo'
         return EmployeeRepository.update(emp)
 
