@@ -45,8 +45,17 @@ class EmployeeList(Resource):
         Devuelve solo `nombre`, `identificacion`, `jefe_inmediato`, `proyecto`,
         ordenados alfabéticamente por `nombre`.
         """
-        emps = EmployeeService.list_employees_brief()
-        return emps, 200
+        try:
+            emps = EmployeeService.list_employees_brief()
+            return {
+                'message': 'Listado de empleados obtenido exitosamente',
+                'data': emps
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al obtener el listado de empleados',
+                'error': str(e)
+            }, 500
 
     @employees_ns.expect(employee_model)
     def post(self):
@@ -58,68 +67,134 @@ class EmployeeList(Resource):
         missing = [f for f in required_fields if not data.get(f)]
         
         if missing:
-            return {'error': f'Campos requeridos faltantes: {", ".join(missing)}'}, 400
+            return {
+                'message': 'Campos requeridos faltantes',
+                'missing_fields': missing
+            }, 400
         
         try:
             emp = EmployeeService.create_employee(data)
             schema = EmployeeSchema()
-            return schema.dump(emp), 201
+            return {
+                'message': 'Empleado creado exitosamente',
+                'data': schema.dump(emp)
+            }, 201
         except Exception as e:
-            return {'error': str(e)}, 400
+            return {
+                'message': 'Error al crear el empleado',
+                'error': str(e)
+            }, 400
 
 @employees_ns.route('/<int:id>')
 class EmployeeDetail(Resource):
     def get(self, id):
         """Obtener detalles de un empleado"""
-        emp = EmployeeService.get_employee(id)
-        if not emp:
-            return {'msg': 'not found'}, 404
-        schema = EmployeeSchema()
-        return schema.dump(emp), 200
+        try:
+            emp = EmployeeService.get_employee(id)
+            if not emp:
+                return {
+                    'message': 'Empleado no encontrado',
+                    'employee_id': id
+                }, 404
+            schema = EmployeeSchema()
+            return {
+                'message': 'Empleado obtenido exitosamente',
+                'data': schema.dump(emp)
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al obtener el empleado',
+                'error': str(e)
+            }, 500
 
     @employees_ns.expect(employee_model)
     def put(self, id):
         """Editar empleado"""
-        emp = EmployeeService.get_employee(id)
-        if not emp:
-            return {'msg': 'not found'}, 404
-        data = request.get_json() or {}
         try:
+            emp = EmployeeService.get_employee(id)
+            if not emp:
+                return {
+                    'message': 'Empleado no encontrado',
+                    'employee_id': id
+                }, 404
+            data = request.get_json() or {}
             updated_emp = EmployeeService.update_employee(id, data)
             schema = EmployeeSchema()
-            return schema.dump(updated_emp), 200
+            return {
+                'message': 'Empleado actualizado exitosamente',
+                'data': schema.dump(updated_emp)
+            }, 200
         except Exception as e:
-            return {'error': str(e)}, 400
+            return {
+                'message': 'Error al actualizar el empleado',
+                'error': str(e)
+            }, 400
 
     def delete(self, id):
         """Inactivar empleado"""
-        emp = EmployeeService.get_employee(id)
-        if not emp:
-            return {'msg': 'not found'}, 404
-        updated_emp = EmployeeService.delete_employee(id)
-        schema = EmployeeSchema()
-        return {'msg': 'employee inactivated', 'data': schema.dump(updated_emp)}, 200
+        try:
+            emp = EmployeeService.get_employee(id)
+            if not emp:
+                return {
+                    'message': 'Empleado no encontrado',
+                    'employee_id': id
+                }, 404
+            updated_emp = EmployeeService.delete_employee(id)
+            schema = EmployeeSchema()
+            return {
+                'message': 'Empleado inactivado exitosamente',
+                'data': schema.dump(updated_emp)
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al inactivar el empleado',
+                'error': str(e)
+            }, 400
 
 @employees_ns.route('/<int:id>/toggle-status')
 class EmployeeToggleStatus(Resource):
     def put(self, id):
         """Activar/inactivar empleado"""
-        emp = EmployeeService.get_employee(id)
-        if not emp:
-            return {'msg': 'not found'}, 404
-        updated_emp = EmployeeService.toggle_employee_status(id)
-        schema = EmployeeSchema()
-        return schema.dump(updated_emp), 200
+        try:
+            emp = EmployeeService.get_employee(id)
+            if not emp:
+                return {
+                    'message': 'Empleado no encontrado',
+                    'employee_id': id
+                }, 404
+            updated_emp = EmployeeService.toggle_employee_status(id)
+            schema = EmployeeSchema()
+            return {
+                'message': 'Estado del empleado actualizado exitosamente',
+                'data': schema.dump(updated_emp)
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al cambiar el estado del empleado',
+                'error': str(e)
+            }, 400
 
 @employees_ns.route('/identificacion/<identificacion>')
 class EmployeeByIdentificacion(Resource):
     def get(self, identificacion):
         """Obtener empleado por identificación"""
-        from Modulos.employees.repository import EmployeeRepository
-        emp = EmployeeRepository.get_by_identificacion(identificacion)
-        if not emp:
-            return {'msg': 'not found'}, 404
-        schema = EmployeeSchema()
-        return schema.dump(emp), 200
+        try:
+            from Modulos.employees.repository import EmployeeRepository
+            emp = EmployeeRepository.get_by_identificacion(identificacion)
+            if not emp:
+                return {
+                    'message': 'Empleado no encontrado',
+                    'identificacion': identificacion
+                }, 404
+            schema = EmployeeSchema()
+            return {
+                'message': 'Empleado obtenido exitosamente',
+                'data': schema.dump(emp)
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al obtener el empleado por identificación',
+                'error': str(e)
+            }, 400
 
 

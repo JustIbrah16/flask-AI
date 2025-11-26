@@ -39,21 +39,34 @@ class LoginResource(Resource):
     @auth_ns.response(400, 'Bad Request', error_response)
     def post(self):
         """Login endpoint - returns JWT token"""
-        data = request.get_json() or {}
-        
-        if not data.get('username') or not data.get('password'):
-            return {'msg': 'Username and password are required', 'code': 'MISSING_FIELDS'}, 400
-        
-        user = AuthService.login(data.get('username'), data.get('password'))
-        if not user:
-            return {'msg': 'Invalid credentials', 'code': 'INVALID_CREDENTIALS'}, 401
-        
-        access_token = create_access_token(identity=user.id)
-        return {
-            'access_token': access_token,
-            'user_id': user.id,
-            'username': user.username
-        }, 200
+        try:
+            data = request.get_json() or {}
+            
+            if not data.get('username') or not data.get('password'):
+                return {
+                    'message': 'Usuario y contraseña son requeridos',
+                    'error': 'MISSING_FIELDS'
+                }, 400
+            
+            user = AuthService.login(data.get('username'), data.get('password'))
+            if not user:
+                return {
+                    'message': 'Credenciales inválidas',
+                    'error': 'INVALID_CREDENTIALS'
+                }, 401
+            
+            access_token = create_access_token(identity=user.id)
+            return {
+                'message': 'Inicio de sesión exitoso',
+                'access_token': access_token,
+                'user_id': user.id,
+                'username': user.username
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error en el inicio de sesión',
+                'error': str(e)
+            }, 500
 
 
 @auth_ns.route('/verify')
@@ -61,8 +74,17 @@ class VerifyResource(Resource):
     @jwt_required()
     def get(self):
         """Verify token - returns user identity"""
-        user_id = get_jwt_identity()
-        return {'user_id': user_id, 'msg': 'Token is valid'}, 200
+        try:
+            user_id = get_jwt_identity()
+            return {
+                'message': 'Token válido',
+                'user_id': user_id
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al verificar el token',
+                'error': str(e)
+            }, 400
 
 
 @auth_ns.route('/logout')
@@ -70,4 +92,12 @@ class LogoutResource(Resource):
     @jwt_required()
     def post(self):
         """Logout endpoint - invalidates token on client side"""
-        return {'msg': 'Successfully logged out'}, 200
+        try:
+            return {
+                'message': 'Sesión cerrada exitosamente'
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al cerrar sesión',
+                'error': str(e)
+            }, 400

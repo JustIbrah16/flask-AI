@@ -16,47 +16,119 @@ report_model = reports_ns.model('Report', {
 @reports_ns.route('/attendance-summary')
 class AttendanceSummary(Resource):
     def get(self):
-        q = ReportsService.attendance_summary()
-        return q, 200
+        try:
+            q = ReportsService.attendance_summary()
+            return {
+                'message': 'Resumen de asistencia obtenido exitosamente',
+                'data': q
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al obtener el resumen de asistencia',
+                'error': str(e)
+            }, 500
 
 @reports_ns.route('/')
 class ReportList(Resource):
     def get(self):
-        reports = ReportsService.get_all_reports()
-        return reports, 200
+        try:
+            reports = ReportsService.get_all_reports()
+            return {
+                'message': 'Listado de reportes obtenido exitosamente',
+                'data': reports
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al obtener el listado de reportes',
+                'error': str(e)
+            }, 500
 
     @reports_ns.expect(report_model)
     def post(self):
-        data = request.get_json() or {}
-        report = ReportsService.create_report(data)
-        schema = ReportSchema()
-        return schema.dump(report), 201
+        try:
+            data = request.get_json() or {}
+            report = ReportsService.create_report(data)
+            schema = ReportSchema()
+            return {
+                'message': 'Reporte creado exitosamente',
+                'data': schema.dump(report)
+            }, 201
+        except Exception as e:
+            return {
+                'message': 'Error al crear el reporte',
+                'error': str(e)
+            }, 400
 
 @reports_ns.route('/<int:id>')
 class ReportDetail(Resource):
     def get(self, id):
-        report = ReportsService.get_report(id)
-        if not report:
-            return {'msg': 'not found'}, 404
-        return report, 200
+        try:
+            report = ReportsService.get_report(id)
+            if not report:
+                return {
+                    'message': 'Reporte no encontrado',
+                    'report_id': id
+                }, 404
+            return {
+                'message': 'Reporte obtenido exitosamente',
+                'data': report
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al obtener el reporte',
+                'error': str(e)
+            }, 500
 
     @reports_ns.expect(report_model)
     def put(self, id):
-        data = request.get_json() or {}
-        report = ReportsService.update_report(id, data)
-        if not report:
-            return {'msg': 'not found'}, 404
-        return report.to_dict(), 200
+        try:
+            data = request.get_json() or {}
+            report = ReportsService.update_report(id, data)
+            if not report:
+                return {
+                    'message': 'Reporte no encontrado',
+                    'report_id': id
+                }, 404
+            return {
+                'message': 'Reporte actualizado exitosamente',
+                'data': report.to_dict()
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al actualizar el reporte',
+                'error': str(e)
+            }, 400
 
     def delete(self, id):
-        deleted_id = ReportsService.delete_report(id)
-        if not deleted_id:
-            return {'msg': 'not found'}, 404
-        return {}, 204
+        try:
+            deleted_id = ReportsService.delete_report(id)
+            if not deleted_id:
+                return {
+                    'message': 'Reporte no encontrado',
+                    'report_id': id
+                }, 404
+            return {
+                'message': 'Reporte eliminado exitosamente'
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al eliminar el reporte',
+                'error': str(e)
+            }, 400
 
 @reports_ns.route('/employee/<int:employee_id>')
 class EmployeeReports(Resource):
     def get(self, employee_id):
-        reports = ReportsService.get_employee_reports(employee_id)
-        return reports, 200
+        try:
+            reports = ReportsService.get_employee_reports(employee_id)
+            return {
+                'message': 'Reportes del empleado obtenidos exitosamente',
+                'employee_id': employee_id,
+                'data': reports
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al obtener los reportes del empleado',
+                'error': str(e)
+            }, 500
 
