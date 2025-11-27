@@ -62,7 +62,8 @@ class LoginResource(Resource):
                 'message': 'Inicio de sesión exitoso',
                 'access_token': access_token,
                 'user_id': user.id,
-                'username': user.username
+                'username': user.username,
+                'user_role': user.role_id
             }, 200
         except Exception as e:
             return {

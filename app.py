@@ -9,6 +9,7 @@ from Modulos.employees.resources import employees_ns
 from Modulos.attendance.resources import attendance_ns
 from Modulos.vacations.resources import vacations_ns
 from Modulos.reports.resources import reports_ns
+from Modulos.certificates.resources import certificates_ns
 
 
 def create_app(config_object=Config):
@@ -30,6 +31,7 @@ def create_app(config_object=Config):
     api.add_namespace(attendance_ns, path='/attendance')
     api.add_namespace(vacations_ns, path='/vacations')
     api.add_namespace(reports_ns, path='/reports')
+    api.add_namespace(certificates_ns, path='/certificates')
 
     return app
 
