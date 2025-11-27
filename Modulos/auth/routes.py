@@ -58,12 +58,21 @@ class LoginResource(Resource):
             access_token = create_access_token(identity=user.id)
             if isinstance(access_token, bytes):
                 access_token = access_token.decode('utf-8')
+
+            rol =  user.role_id
+            if rol == 1:
+                rol = 'admin'
+            elif rol == 2:
+                rol = 'agent'
+            else:
+                rol = 'employee'
             return {
                 'message': 'Inicio de sesión exitoso',
                 'access_token': access_token,
                 'user_id': user.id,
                 'username': user.username,
-                'user_role': user.role_id
+                'role': rol
+               
             }, 200
         except Exception as e:
             return {
