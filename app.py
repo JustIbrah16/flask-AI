@@ -20,18 +20,33 @@ def create_app(config_object=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": app.config['CORS_ORIGINS']}})
+    cors.init_app(app, resources={
+        r"/auth/*": {"origins": app.config['CORS_ORIGINS']},
+        r"/employees/*": {"origins": app.config['CORS_ORIGINS']},
+        r"/attendance/*": {"origins": app.config['CORS_ORIGINS']},
+        r"/vacations/*": {"origins": app.config['CORS_ORIGINS']},
+        r"/reports/*": {"origins": app.config['CORS_ORIGINS']},
+    })
 
-    # API (Swagger)
-    api = Api(app, version='1.0', title='HR Platform API', doc='/docs')
+    # Flask-RESTX API
+    api = Api(app, title="GH360 API", version="1.0", description="API Gestión Humana 360")
 
-    # register namespaces
-    api.add_namespace(auth_ns, path='/auth')
-    api.add_namespace(employees_ns, path='/employees')
-    api.add_namespace(attendance_ns, path='/attendance')
-    api.add_namespace(vacations_ns, path='/vacations')
-    api.add_namespace(reports_ns, path='/reports')
-    api.add_namespace(certificates_ns, path='/certificates')
+    # Registrar namespaces
+    api.add_namespace(auth_ns, path="/auth")
+    api.add_namespace(employees_ns, path="/employees")
+    api.add_namespace(attendance_ns, path="/attendance")
+    api.add_namespace(vacations_ns, path="/vacations")
+    api.add_namespace(reports_ns, path="/reports")
+    api.add_namespace(certificates_ns, path="/certificates")
+
+    # CORS extra headers (global)
+    @app.after_request
+    def apply_cors(response):
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:4200"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        return response
 
     return app
 
