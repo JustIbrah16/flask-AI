@@ -56,6 +56,8 @@ class LoginResource(Resource):
                 }, 401
             
             access_token = create_access_token(identity=user.id)
+            if isinstance(access_token, bytes):
+                access_token = access_token.decode('utf-8')
             return {
                 'message': 'Inicio de sesión exitoso',
                 'access_token': access_token,
