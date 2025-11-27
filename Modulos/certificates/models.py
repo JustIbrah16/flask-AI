@@ -39,6 +39,7 @@ class Certificate(db.Model):
     subject_name = db.Column(db.String(200), nullable=False)
     subject_identificacion = db.Column(db.BigInteger, nullable=True)
     subject_email = db.Column(db.String(120), nullable=True)
+    pdf_path = db.Column(db.String(255))  
 
     # Contenido final del certificado (HTML/Texto/JSON según uso)
     certificate_content = db.Column(db.Text, nullable=False)
