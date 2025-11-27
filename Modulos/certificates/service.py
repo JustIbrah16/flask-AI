@@ -2,7 +2,7 @@ from Modulos.certificates.repository import CertificateTypeRepository, Certifica
 from Modulos.employees.repository import EmployeeRepository
 from werkzeug.exceptions import NotFound
 from datetime import datetime
-
+from Modulos.certificates.utils import PDFGenerator
 
 class CertificateService:
     # Certificate Types
@@ -65,23 +65,32 @@ class CertificateService:
         if not employee:
             raise NotFound("No se encontró un empleado con la identificación proporcionada.")
 
+
+        agent = EmployeeRepository.get_by_id(data.get('created_by'))
+        if not agent:
+            raise NotFound("No se encontró un agente con la identificación proporcionada.")
+        
         # 4. Reemplazar las variables en la plantilla
         content = template.replace('{{ nombre_empleado }}', employee.nombre or '')
         content = content.replace('{{ identificacion_empleado }}', str(employee.identificacion) or '')
         content = content.replace('{{ fecha_inicio_trabajo }}', str(employee.fecha_ingreso) or '')
         content = content.replace('{{ cargo_empleado }}', employee.cargo.name if employee.cargo else '')
         content = content.replace('{{ fecha_emision }}', datetime.now().strftime('%d de %B de %Y'))
+        content = content.replace('{{ nombre_firmante }}', agent.nombre or '')
+        # 5. Generar PDF a partir del HTML
+        pdf_path = PDFGenerator.html_to_pdf(content)
 
-        # 5. Preparar los datos para el nuevo certificado
+        # 6. Guardar en la BD
         new_cert_data = {
             'certificate_type_id': cert_type_id,
-            'created_by': data.get('created_by'), 
+            'created_by': data.get('created_by'),
             'subject_name': employee.nombre,
             'subject_identificacion': employee.identificacion,
             'subject_email': employee.correo,
-            'certificate_content': content
+            'certificate_content': content,       # HTML original
+            'pdf_path': pdf_path                  # << NUEVO
         }
-        
+
         return CertificateRepository.create(new_cert_data)
 
     @staticmethod
