@@ -61,17 +61,20 @@ Esta es una REST API para un sistema de Recursos Humanos con 3 roles:
 - `GET /attendance/` - Listar todos los registros de asistencia
 - `POST /attendance/` - Crear registro manual de asistencia
 - `GET /attendance/<id>` - Obtener detalles de un registro
-- `GET /attendance/employee/<employee_id>` - Listar asistencia de un empleado (con filtros opcionales: `from_date`, `to_date`)
+- `GET /attendance/employee/<employee_id>` - Listar asistencia de un empleado (con filtros opcionales: `from_date`,`to_date`)
 - `GET /attendance/employee/<employee_id>/today` - Obtener asistencia de hoy
 - `POST /attendance/employee/<employee_id>/check-in` - Registrar entrada (check-in)
 - `POST /attendance/employee/<employee_id>/check-out` - Registrar salida (check-out) y calcular horas trabajadas
 - `GET /attendance/employee/<employee_id>/summary` - Resumen de asistencia y horas (requiere `from_date` y `to_date`)
 
 ### Certificates (`/certificates`)
-- `GET /certificates/employee/<employee_id>` - Listar certificados de un empleado.
-- `POST /certificates/employee/<employee_id>` - Solicitar un nuevo certificado (ej. laboral).
-- `GET /certificates/<id>` - Descargar un certificado.
-
+`GET /certificates/employee/<employee_id>` - Listar certificados de un empleado
+`POST /certificates/employee/<employee_id>` - Solicitar un nuevo certificado (ej. laboral)
+`GET /certificates/<id>` - Descargar o ver un certificado específico
+`PUT /certificates/<id>` - Actualizar información de un certificado (opcional)
+`DELETE /certificates/<id>` - Eliminar un certificado (opcional)
+`GET /certificates/all` - Listar todos los certificados del sistema (solo admin, opcional)
+`GET /certificates/employee/<employee_id>/summary` - Obtener resumen de certificados de un empleado (opcional)
 ## Models
 
 ### Employee (Completo)
