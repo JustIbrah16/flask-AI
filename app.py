@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_restx import Api
 from config import Config
-from extensions import db, migrate, jwt, cors
+from extensions import db, migrate, jwt
+from flask_cors import CORS
 
 # import namespaces
 from Modulos.auth.routes import auth_ns
@@ -16,22 +17,25 @@ def create_app(config_object=Config):
     app = Flask(__name__)
     app.config.from_object(config_object)
 
-    # extensions
+    # EXTENSIONS
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    cors.init_app(app, resources={
-        r"/auth/*": {"origins": app.config['CORS_ORIGINS']},
-        r"/employees/*": {"origins": app.config['CORS_ORIGINS']},
-        r"/attendance/*": {"origins": app.config['CORS_ORIGINS']},
-        r"/vacations/*": {"origins": app.config['CORS_ORIGINS']},
-        r"/reports/*": {"origins": app.config['CORS_ORIGINS']},
-    })
 
-    # Flask-RESTX API
-    api = Api(app, title="GH360 API", version="1.0", description="API Gestión Humana 360")
+    # CORS CONFIG (CORRECTA)
+    CORS(app,
+         resources={r"/*": {"origins": Config.CORS_ORIGINS}},
+         supports_credentials=True)
 
-    # Registrar namespaces
+    # RESTX API
+    api = Api(
+        app,
+        title="GH360 API",
+        version="1.0",
+        description="API Gestión Humana 360"
+    )
+
+    # Namespaces
     api.add_namespace(auth_ns, path="/auth")
     api.add_namespace(employees_ns, path="/employees")
     api.add_namespace(attendance_ns, path="/attendance")
@@ -39,16 +43,8 @@ def create_app(config_object=Config):
     api.add_namespace(reports_ns, path="/reports")
     api.add_namespace(certificates_ns, path="/certificates")
 
-    # CORS extra headers (global)
-    @app.after_request
-    def apply_cors(response):
-        response.headers["Access-Control-Allow-Origin"] = "http://localhost:4200"
-        response.headers["Access-Control-Allow-Credentials"] = "true"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-        return response
-
     return app
+
 
 
 if __name__ == '__main__':
