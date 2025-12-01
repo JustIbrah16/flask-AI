@@ -29,6 +29,7 @@ employee_model = employees_ns.model('Employee', {
     'zapatos': fields.Integer(description='Talla de zapatos'),
     'abrigo_id': fields.Integer(description='ID talla de abrigo'),
     'eps_id': fields.Integer(description='ID de EPS'),
+    'arl_id': fields.Integer(description='ID de ARL'),
     'estudios': fields.String(description='Información de estudios'),
     'estado_civil_id': fields.Integer(description='ID del estado civil'),
     'hijos': fields.Integer(description='Número de hijos'),

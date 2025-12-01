@@ -1,31 +1,24 @@
-# Imagen base
 FROM python:3.11-slim
 
-# Establecer directorio de trabajo
+
+RUN apt-get update && apt-get install -y \
+    libpango-1.0-0 \
+    libcairo2 \
+    pango-graphite \
+    libgdk-pixbuf-2.0-0 \
+    libffi-dev \
+    shared-mime-info \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copiar requirements.txt e instalar dependencias
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar todo el proyecto
 COPY . .
 
-# definir tu archivo principal de flask
-ENV FLASK_APP=app.py  
+ENV PYTHONUNBUFFERED=1
 
-# puerto expuesto
 EXPOSE 5000
 
-# comando que usas normalmente
-CMD ["flask", "run", "--host=0.0.0.0"]
-
-
-
-
-
-
-
-
-
-
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]

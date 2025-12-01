@@ -55,6 +55,13 @@ class MaritalStatus(db.Model):
     name = db.Column(db.String(50), nullable=False, unique=True)
 
 
+class ARL(db.Model):
+    __tablename__ = 'arl_providers'  # ARL = Administradora de Riesgos Laborales
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+
+
+
 class Employee(db.Model):
     __tablename__ = 'employees'
 
@@ -105,6 +112,8 @@ class Employee(db.Model):
     abrigo = db.relationship('Size', foreign_keys=[abrigo_id], backref='employees_abrigo')
     eps_id = db.Column(db.Integer, db.ForeignKey('eps_providers.id'))
     eps = db.relationship('EPS', backref='employees')
+    arl_id = db.Column(db.Integer, db.ForeignKey('arl_providers.id'))
+    arl = db.relationship('ARL', backref='employees')
 
     # Estudios
     estudios = db.Column(db.Text)  # Información de estudios
@@ -156,6 +165,8 @@ class Employee(db.Model):
             'abrigo': self.abrigo.name if self.abrigo else None,
             'eps_id': self.eps_id,
             'eps': self.eps.name if self.eps else None,
+            'arl_id': self.arl_id,
+            'arl': self.arl.name if self.arl else None,
             'estudios': self.estudios,
             'estado_civil_id': self.estado_civil_id,
             'estado_civil': self.estado_civil.name if self.estado_civil else None,
