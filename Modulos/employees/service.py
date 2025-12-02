@@ -1,5 +1,4 @@
 from Modulos.employees.repository import EmployeeRepository
-from Modulos.employees.models import Employee
 from werkzeug.security import generate_password_hash
 
 class EmployeeService:
@@ -73,4 +72,3 @@ class EmployeeService:
         emp.is_active = 0  # 0: inactivo
         emp.estado = 'inactivo'
         return EmployeeRepository.update(emp)
-

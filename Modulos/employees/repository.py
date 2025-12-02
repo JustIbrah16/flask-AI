@@ -43,4 +43,3 @@ class EmployeeRepository:
     def delete(emp):
         db.session.delete(emp)
         db.session.commit()
-

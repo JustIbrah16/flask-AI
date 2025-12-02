@@ -198,4 +198,3 @@ class EmployeeByIdentificacion(Resource):
                 'error': str(e)
             }, 400
 
-

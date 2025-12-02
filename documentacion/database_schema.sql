@@ -223,6 +223,7 @@ CREATE TABLE IF NOT EXISTS `certificates` (
   `subject_identificacion` BIGINT,
   `subject_email` VARCHAR(120),
   `certificate_content` TEXT NOT NULL,
+  `pdf_path` VARCHAR(255),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_certificates_types` FOREIGN KEY (`certificate_type_id`) REFERENCES `certificate_types` (`id`),
   CONSTRAINT `fk_certificates_employees` FOREIGN KEY (`created_by`) REFERENCES `employees` (`id`) ON DELETE SET NULL
