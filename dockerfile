@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     libcairo2 \
     libpango-1.0-0 \
     libpangoft2-1.0-0 \
-    libgdk-pixbuf2.0-0 \
     libffi-dev \
     shared-mime-info \
     libpq-dev \
@@ -28,5 +27,4 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 5000
 
-# Usar gunicorn con la sintaxis correcta para la vinculación (binding)
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+CMD ["./entrypoint.sh"]
