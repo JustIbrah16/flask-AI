@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 # Archivos compilados de Python
 __pycache__/
 *.pyc
 
 # Virtual environment
 .venv/
-=======
-__pycache__/
-*.pyc
->>>>>>> main
