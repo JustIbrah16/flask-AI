@@ -58,6 +58,9 @@ class LoginResource(Resource):
             access_token = create_access_token(identity=user.id)
             if isinstance(access_token, bytes):
                 access_token = access_token.decode('utf-8')
+            
+            cargo_nombre = user.cargo.name if user.cargo else 'N/A'
+            cargo =  cargo_nombre
 
             rol =  user.role_id
             if rol == 1:
@@ -71,7 +74,8 @@ class LoginResource(Resource):
                 'access_token': access_token,
                 'user_id': user.id,
                 'username': user.username,
-                'role': rol
+                'role': rol,
+                'cargo': cargo
                
             }, 200
         except Exception as e:
