@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_restx import Api
 from config import Config
-from extensions import db, migrate, jwt, cors
+from extensions import db, migrate, jwt
+from flask_cors import CORS
 
 from Modulos.auth.routes import auth_ns
 from Modulos.employees.resources import employees_ns
@@ -26,15 +27,20 @@ def create_app(config_object=Config):
     app = Flask(__name__)
     app.config.from_object(config_object)
 
-    # extensions
+    # EXTENSIONS
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": app.config['CORS_ORIGINS']}})
 
-    # API (Swagger)
-    api = Api(app, version='1.0', title='HR Platform API', doc='/docs')
+    # CORS CONFIG
+    CORS(app,
+         resources={r"/*": {"origins": Config.CORS_ORIGINS}},
+         supports_credentials=True)
 
+    # CREAR LA API
+    api = Api(app)
+
+    # NAMESPACES
     api.add_namespace(auth_ns, path='/auth')
     api.add_namespace(employees_ns, path='/employees')
     api.add_namespace(attendance_ns, path='/attendance')
@@ -54,8 +60,3 @@ def create_app(config_object=Config):
     api.add_namespace(sizes_ns, path='/sizes')
 
     return app
-
-app = create_app()
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
