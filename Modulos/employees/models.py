@@ -1,58 +1,18 @@
 from extensions import db
 from datetime import datetime
 from Modulos.roles.models import Role
+from Modulos.others.areas.models import Area
+from Modulos.others.arl.models import ARL
+from Modulos.others.bancos.models import Bank
+from Modulos.others.cargos.models import Position
+from Modulos.others.ciudades.models import City
+from Modulos.others.contratos.models import ContractType
+from Modulos.others.eps.models import EPS
+from Modulos.others.estado_civil.models import MaritalStatus
+from Modulos.others.generos.models import Gender
+from Modulos.others.proyectos.models import Project
+from Modulos.others.tallas.models import Size
 
-
-# Tablas maestras (plurales)
-class City(db.Model):
-    __tablename__ = 'cities'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False, unique=True)
-
-class Position(db.Model):
-    __tablename__ = 'positions'  # cargos
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False, unique=True)
-
-class ContractType(db.Model):
-    __tablename__ = 'contract_types'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False, unique=True)
-
-class Bank(db.Model):
-    __tablename__ = 'banks'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False, unique=True)
-
-class Project(db.Model):
-    __tablename__ = 'projects'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(150), nullable=False, unique=True)
-
-class Gender(db.Model):
-    __tablename__ = 'genders'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False, unique=True)
-
-class Size(db.Model):
-    __tablename__ = 'sizes'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False, unique=True)
-
-class Area(db.Model):
-    __tablename__ = 'areas'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
-
-class EPS(db.Model):
-    __tablename__ = 'eps_providers'  # EPS = Empresa Promotora de Salud
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False, unique=True)
-
-class MaritalStatus(db.Model):
-    __tablename__ = 'marital_statuses'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False, unique=True)
 
 
 class Employee(db.Model):
@@ -105,6 +65,8 @@ class Employee(db.Model):
     abrigo = db.relationship('Size', foreign_keys=[abrigo_id], backref='employees_abrigo')
     eps_id = db.Column(db.Integer, db.ForeignKey('eps_providers.id'))
     eps = db.relationship('EPS', backref='employees')
+    arl_id = db.Column(db.Integer, db.ForeignKey('arl_providers.id'))
+    arl = db.relationship('ARL', backref='employees')
 
     # Estudios
     estudios = db.Column(db.Text)  # Información de estudios
@@ -156,6 +118,8 @@ class Employee(db.Model):
             'abrigo': self.abrigo.name if self.abrigo else None,
             'eps_id': self.eps_id,
             'eps': self.eps.name if self.eps else None,
+            'arl_id': self.arl_id,
+            'arl': self.arl.name if self.arl else None,
             'estudios': self.estudios,
             'estado_civil_id': self.estado_civil_id,
             'estado_civil': self.estado_civil.name if self.estado_civil else None,

@@ -12,7 +12,7 @@ class PDFGenerator:
         if not save_path:
             folder = "static/certificates"
             os.makedirs(folder, exist_ok=True)
-            filename = f"cert_{datetime.now().strftime('%Y%m%d%H%M%S')}.pdf"
+            filename = f"cert_{datetime.now().strftime('%Y%m%d')}.pdf"
             save_path = os.path.join(folder, filename)
 
         # Convertir HTML → PDF

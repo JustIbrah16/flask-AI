@@ -64,6 +64,8 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
     # Salud y Estudios
     eps_id = fields.Integer(allow_none=True)
     eps = fields.Function(lambda obj: obj.eps.name if obj.eps else None, dump_only=True)
+    arl_id = fields.Integer(allow_none=True)
+    arl = fields.Function(lambda obj: obj.arl.name if obj.arl else None, dump_only=True)
     estudios = fields.Str(allow_none=True)
     
     # Estado Civil

@@ -87,6 +87,12 @@ INSERT IGNORE INTO `marital_statuses` (`id`, `name`) VALUES
 (4, 'Divorciado'),
 (5, 'Viudo');
 
+INSERT INTO `arl_providers` (`id`, `name`) VALUES
+(1,'ARL Sura'),
+(2,'ARL Bolívar'),
+(3,'ARL Colmena'),
+(4,'ARL Positiva'),
+(5,'ARL Seguros de Vida Alfa');
 -- Empleados (documentación): mismos valores que el script principal
 INSERT INTO `employees` (
   `id`, `identificacion`, `nombre`, `fecha_nacimiento`, `correo`, `contacto`,

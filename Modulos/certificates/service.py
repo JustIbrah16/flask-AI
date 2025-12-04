@@ -87,8 +87,8 @@ class CertificateService:
             'subject_name': employee.nombre,
             'subject_identificacion': employee.identificacion,
             'subject_email': employee.correo,
-            'certificate_content': content,       # HTML original
-            'pdf_path': pdf_path                  # << NUEVO
+            'certificate_content': content,     
+            'pdf_path': pdf_path                 
         }
 
         return CertificateRepository.create(new_cert_data)

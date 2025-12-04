@@ -13,7 +13,15 @@ Esta es una REST API para un sistema de Recursos Humanos con 3 roles:
   ```json
   {"username": "...", "password": "..."}
   ```
-  Retorna: `{"access_token": "..."}`
+  Retorna:
+  ```json
+  {
+    "message": "Inicio de sesión exitoso",
+    "access_token": "...",
+    "user_id": 1,
+    "username": "someuser"
+  }
+  ```
 
 - `POST /auth/register` - Registrar nuevo usuario (solo admin/agente)
   ```json
@@ -53,12 +61,20 @@ Esta es una REST API para un sistema de Recursos Humanos con 3 roles:
 - `GET /attendance/` - Listar todos los registros de asistencia
 - `POST /attendance/` - Crear registro manual de asistencia
 - `GET /attendance/<id>` - Obtener detalles de un registro
-- `GET /attendance/employee/<employee_id>` - Listar asistencia de un empleado (con filtros opcionales: `from_date`, `to_date`)
+- `GET /attendance/employee/<employee_id>` - Listar asistencia de un empleado (con filtros opcionales: `from_date`,`to_date`)
 - `GET /attendance/employee/<employee_id>/today` - Obtener asistencia de hoy
 - `POST /attendance/employee/<employee_id>/check-in` - Registrar entrada (check-in)
 - `POST /attendance/employee/<employee_id>/check-out` - Registrar salida (check-out) y calcular horas trabajadas
 - `GET /attendance/employee/<employee_id>/summary` - Resumen de asistencia y horas (requiere `from_date` y `to_date`)
 
+### Certificates (`/certificates`)
+`GET /certificates/employee/<employee_id>` - Listar certificados de un empleado
+`POST /certificates/employee/<employee_id>` - Solicitar un nuevo certificado (ej. laboral)
+`GET /certificates/<id>` - Descargar o ver un certificado específico
+`PUT /certificates/<id>` - Actualizar información de un certificado (opcional)
+`DELETE /certificates/<id>` - Eliminar un certificado (opcional)
+`GET /certificates/all` - Listar todos los certificados del sistema (solo admin, opcional)
+`GET /certificates/employee/<employee_id>/summary` - Obtener resumen de certificados de un empleado (opcional)
 ## Models
 
 ### Employee (Completo)
@@ -156,6 +172,19 @@ Esta es una REST API para un sistema de Recursos Humanos con 3 roles:
 }
 ```
 
+### Certificate
+```json
+{
+  "id": 1,
+  "employee_id": 1,
+  "certificate_type": "laboral",
+  "issue_date": "2025-11-26",
+  "status": "generated",
+  "url": "/certificates/1/download",
+  "created_at": "2025-11-26T09:00:00"
+}
+```
+
 ## Status Codes
 
 - `200` - OK
@@ -177,3 +206,18 @@ python app.py
 
 API disponible en: `http://localhost:5000`
 Swagger docs en: `http://localhost:5000/docs`
+
+## Resumen de Capacidades de la Plataforma
+
+La plataforma de Recursos Humanos ofrece una solución integral para la gestión de personal, con funcionalidades específicas para diferentes roles dentro de la organización (Administrador, Agente y Empleado).
+
+Las capacidades clave incluyen:
+
+*   **Gestión de Empleados:** Creación, visualización, actualización y desactivación de perfiles de empleados. Almacena información detallada que va desde datos personales y de contacto hasta información contractual y salarial.
+*   **Control de Vacaciones:** Los empleados pueden solicitar vacaciones, y los agentes pueden gestionar estas solicitudes (aprobar o rechazar), manteniendo un registro claro del historial de vacaciones de cada empleado.
+*   **Sistema de Reportes:** Permite a los empleados enviar reportes (por ejemplo, reportes mensuales o de incidentes), que luego pueden ser revisados y gestionados por los agentes.
+*   **Seguimiento de Asistencia:** Registra las horas de entrada y salida de los empleados, calcula las horas trabajadas y proporciona resúmenes de asistencia para un control eficiente del tiempo y la productividad.
+*   **Generación de Certificados:** Permite a los empleados solicitar y descargar certificados (ej. laborales) de forma automática.
+*   **Autenticación y Seguridad:** Sistema de autenticación basado en JWT para proteger los endpoints y garantizar que los usuarios solo accedan a la información y funcionalidades permitidas por su rol.
+
+Esta API centraliza las operaciones de recursos humanos, facilitando la administración del personal y mejorando la comunicación entre los empleados y el departamento de RRHH.
