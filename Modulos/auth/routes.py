@@ -75,7 +75,6 @@ class LoginResource(Resource):
                 'user_id': user.id,
                 'username': user.username,
                 'role': rol,
-                'cargo': cargo
                
             }, 200
         except Exception as e:
