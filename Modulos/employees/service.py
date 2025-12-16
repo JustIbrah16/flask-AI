@@ -67,7 +67,7 @@ def map_employee_to_brief(emp):
         "nombre": emp.nombre,
         "identificacion": emp.identificacion,
         "jefe_inmediato": emp.jefe_inmediato,
-        "proyecto": emp.proyecto,  # <--- RAW
+        "proyecto": emp.proyecto.name if emp.proyecto else None, 
     }
 
 

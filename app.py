@@ -20,7 +20,8 @@ from Modulos.others.eps.resources import eps_ns
 from Modulos.others.estado_civil.resources import marital_status_ns 
 from Modulos.others.generos.resources import genero_ns       
 from Modulos.others.proyectos.resources import proyectos_ns  
-from Modulos.others.tallas.resources import sizes_ns       
+from Modulos.others.tallas.resources import sizes_ns  
+from Modulos.roles.resources import roles_ns     
 
 
 def create_app(config_object=Config):
@@ -58,5 +59,6 @@ def create_app(config_object=Config):
     api.add_namespace(genero_ns, path='/genders') 
     api.add_namespace(proyectos_ns, path='/projects')
     api.add_namespace(sizes_ns, path='/sizes')
+    api.add_namespace(roles_ns, path='/roles')
 
     return app
