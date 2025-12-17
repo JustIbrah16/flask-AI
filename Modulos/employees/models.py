@@ -1,4 +1,5 @@
 from extensions import db
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from Modulos.roles.models import Role
 from Modulos.others.areas.models import Area
@@ -80,6 +81,13 @@ class Employee(db.Model):
     is_active = db.Column(db.Integer, default=1)  # 0: inactivo, 1: activo, 2: licencia
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
 
     def to_dict(self):
         return {

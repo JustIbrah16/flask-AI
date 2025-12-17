@@ -1,98 +1,135 @@
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from flask import request
+from marshmallow import ValidationError
 
 from Modulos.employees.service import EmployeeService
 
+employees_ns = Namespace("employees", description="Gestión de empleados")
 
-employees_ns = Namespace(
-    "employees",
-    description="Gestión de empleados"
-)
+# =======================
+# Swagger Models
+# =======================
 
-# ============================================================
-# LISTAR RESUMEN
-# ============================================================
+employee_create_model = employees_ns.model("EmployeeCreate", {
+    "nombre": fields.String(required=True),
+    "identificacion": fields.Integer(required=True),
+    "correo": fields.String(required=True),
+
+    "username": fields.String(required=True),
+    "password": fields.String(required=True),
+
+    "contacto": fields.Integer,
+    "direccion": fields.String,
+
+    "ciudad_id": fields.Integer,
+    "cargo_id": fields.Integer,
+    "area_id": fields.Integer,
+    "role_id": fields.Integer,
+    "proyecto_id": fields.Integer,
+
+    "jefe_inmediato": fields.String,
+    "salario": fields.Float,
+
+    "banco_id": fields.Integer,
+    "numero_cuenta_bancaria": fields.Integer,
+
+    "genero_id": fields.Integer,
+    "camisa_id": fields.Integer,
+    "abrigo_id": fields.Integer,
+
+    "eps_id": fields.Integer,
+    "arl_id": fields.Integer,
+
+    "estado_civil_id": fields.Integer,
+    "hijos": fields.Integer,
+
+    "tipo_contrato_id": fields.Integer
+})
+
+employee_update_model = employees_ns.model("EmployeeUpdate", {
+    "nombre": fields.String,
+    "correo": fields.String,
+    "contacto": fields.Integer,
+    "direccion": fields.String,
+    "salario": fields.Float,
+    "jefe_inmediato": fields.String,
+    "proyecto_id": fields.Integer
+})
+
+# =======================
+# Routes
+# =======================
+
 @employees_ns.route("/")
-class EmployeeList(Resource):
-    def get(self):
-        """Listar empleados (vista resumida: nombre, identificación, jefe, proyecto)"""
-        result = EmployeeService.get_all_brief()
-        return {"message": "Listado de empleados", "data": result}, 200
+class Employees(Resource):
 
+    def get(self):
+        return {
+            "message": "Listado resumido",
+            "data": EmployeeService.list_brief()
+        }, 200
+
+    @employees_ns.expect(employee_create_model, validate=True)
     def post(self):
-        """Crear un nuevo empleado"""
-        json_data = request.get_json()
-        new_emp = EmployeeService.create_employee(json_data)
-        return {"message": "Empleado creado exitosamente", "data": new_emp}, 201
+        data = request.get_json()
+        emp = EmployeeService.create(data)
+        return {
+            "message": "Empleado creado",
+            "data": emp
+        }, 201
 
 
-# ============================================================
-# LISTAR TODOS DETALLADOS
-# ============================================================
 @employees_ns.route("/all")
-class EmployeeListDetailed(Resource):
+class EmployeesAll(Resource):
+
     def get(self):
-        """Listar todos los empleados con información completa"""
-        result = EmployeeService.get_all()
-        return {"message": "Listado detallado de empleados", "data": result}, 200
+        return {
+            "message": "Listado completo",
+            "data": EmployeeService.list_all()
+        }, 200
 
 
-# ============================================================
-# BUSCAR POR ID
-# ============================================================
 @employees_ns.route("/<int:emp_id>")
 class EmployeeById(Resource):
+
     def get(self, emp_id):
-        """Obtener empleado por ID"""
         emp = EmployeeService.get_by_id(emp_id)
         if not emp:
             return {"message": "Empleado no encontrado"}, 404
-        return {"message": "Empleado encontrado", "data": emp}, 200
+        return {"data": emp}, 200
 
+    @employees_ns.expect(employee_update_model, validate=True)
     def put(self, emp_id):
-        """Actualizar información de un empleado"""
-        json_data = request.get_json()
-        updated = EmployeeService.update_employee(emp_id, json_data)
+        data = request.get_json()
 
-        if not updated:
+        try:
+            emp = EmployeeService.update(emp_id, data)
+        except ValidationError as e:
+            return {"message": "Error de validación", "errors": e.messages}, 400
+
+        if not emp:
             return {"message": "Empleado no encontrado"}, 404
 
-        return {"message": "Empleado actualizado", "data": updated}, 200
+        return {
+            "message": "Empleado actualizado",
+            "data": emp
+        }, 200
 
     def delete(self, emp_id):
-        """Eliminar empleado (físico)"""
-        deleted = EmployeeService.delete_employee(emp_id)
-        if not deleted:
+        emp = EmployeeService.deactivate(emp_id)
+        if not emp:
             return {"message": "Empleado no encontrado"}, 404
+        return {
+            "message": "Empleado inactivado",
+            "data": emp
+        }, 200
 
-        return {"message": "Empleado eliminado correctamente"}, 200
 
-
-# ============================================================
-# BUSCAR POR IDENTIFICACIÓN
-# ============================================================
 @employees_ns.route("/identificacion/<int:identificacion>")
 class EmployeeByIdentificacion(Resource):
+
     def get(self, identificacion):
-        """Buscar empleado por número de identificación"""
         emp = EmployeeService.get_by_identificacion(identificacion)
-        
         if not emp:
             return {"message": "Empleado no encontrado"}, 404
-
-        return {"message": "Empleado encontrado", "data": emp}, 200
-
-
-# ============================================================
-# INACTIVAR EMPLEADO
-# ============================================================
-@employees_ns.route("/<int:emp_id>/deactivate")
-class EmployeeDeactivate(Resource):
-    def patch(self, emp_id):
-        """Inactivar empleado (is_active = 0)"""
-        emp = EmployeeService.deactivate_employee(emp_id)
-        
-        if not emp:
-            return {"message": "Empleado no encontrado"}, 404
-
-        return {"message": "Empleado desactivado", "data": emp}, 200
+        return {"data": emp}, 200

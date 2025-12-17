@@ -1,8 +1,8 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields,validates, ValidationError
 
 
 # ============================================================
-#  ENTIDAD BASE (estructura mínima)
+# BASE
 # ============================================================
 class EmployeeBaseEntity(Schema):
     id = fields.Int()
@@ -12,7 +12,7 @@ class EmployeeBaseEntity(Schema):
 
 
 # ============================================================
-#  ENTIDAD PARA LISTAR (resumen)
+# RESUMEN
 # ============================================================
 class EmployeeBriefEntity(Schema):
     nombre = fields.Str()
@@ -22,46 +22,46 @@ class EmployeeBriefEntity(Schema):
 
 
 # ============================================================
-#  ENTIDAD DETALLADA (perfil completo)
+# DETALLE
 # ============================================================
 class EmployeeDetailEntity(Schema):
     id = fields.Int()
     identificacion = fields.Int()
     nombre = fields.Str()
-    fecha_nacimiento = fields.Date()
+    fecha_nacimiento = fields.Date(allow_none=True)
     correo = fields.Str()
-    contacto = fields.Int()
+    contacto = fields.Int(allow_none=True)
 
-    direccion = fields.Str()
-    ciudad = fields.Str()
+    direccion = fields.Str(allow_none=True)
+    ciudad = fields.Str(allow_none=True)
 
-    cargo = fields.Str()
-    area = fields.Str()
-    role = fields.Str()
+    cargo = fields.Str(allow_none=True)
+    area = fields.Str(allow_none=True)
+    role = fields.Str(allow_none=True)
 
-    jefe_inmediato = fields.Str()
-    tipo_contrato = fields.Str()
+    jefe_inmediato = fields.Str(allow_none=True)
+    tipo_contrato = fields.Str(allow_none=True)
 
-    banco = fields.Str()
-    numero_cuenta_bancaria = fields.Int()
-    salario = fields.Float()
+    banco = fields.Str(allow_none=True)
+    numero_cuenta_bancaria = fields.Int(allow_none=True)
+    salario = fields.Float(allow_none=True)
 
-    fecha_ingreso = fields.Date()
-    proyecto = fields.Str()
+    fecha_ingreso = fields.Date(allow_none=True)
+    proyecto = fields.Str(allow_none=True)
     estado = fields.Str()
 
-    genero = fields.Str()
-    camisa = fields.Str()
-    pantalon = fields.Int()
-    zapatos = fields.Int()
-    abrigo = fields.Str()
+    genero = fields.Str(allow_none=True)
+    camisa = fields.Str(allow_none=True)
+    pantalon = fields.Int(allow_none=True)
+    zapatos = fields.Int(allow_none=True)
+    abrigo = fields.Str(allow_none=True)
 
-    eps = fields.Str()
-    arl = fields.Str()
-    estudios = fields.Str()
+    eps = fields.Str(allow_none=True)
+    arl = fields.Str(allow_none=True)
+    estudios = fields.Str(allow_none=True)
 
-    estado_civil = fields.Str()
-    hijos = fields.Int()
+    estado_civil = fields.Str(allow_none=True)
+    hijos = fields.Int(allow_none=True)
 
     username = fields.Str()
     is_active = fields.Int()
@@ -71,54 +71,66 @@ class EmployeeDetailEntity(Schema):
 
 
 # ============================================================
-#  ENTIDAD PARA CREAR EMPLEADOS
+# CREATE
 # ============================================================
 class EmployeeCreateEntity(Schema):
     nombre = fields.Str(required=True)
     identificacion = fields.Int(required=True)
     correo = fields.Email(required=True)
+
+    username = fields.Str(required=True)
+    password = fields.Str(required=True, load_only=True)
+
     contacto = fields.Int()
     direccion = fields.Str()
     fecha_nacimiento = fields.Date()
+
+    ciudad_id = fields.Int()
     cargo_id = fields.Int()
     area_id = fields.Int()
     role_id = fields.Int()
     proyecto_id = fields.Int()
+
     jefe_inmediato = fields.Str()
     salario = fields.Float()
+
     numero_cuenta_bancaria = fields.Int()
     banco_id = fields.Int()
+
     genero_id = fields.Int()
     camisa_id = fields.Int()
     abrigo_id = fields.Int()
+
     eps_id = fields.Int()
     arl_id = fields.Int()
+
     estado_civil_id = fields.Int()
     hijos = fields.Int()
+
     tipo_contrato_id = fields.Int()
 
+    is_active = fields.Int(load_default=1)
+
 
 # ============================================================
-#  ENTIDAD PARA ACTUALIZAR EMPLEADOS (parcial)
+# UPDATE
 # ============================================================
 class EmployeeUpdateEntity(Schema):
-    nombre = fields.Str()
-    correo = fields.Email()
-    contacto = fields.Int()
-    direccion = fields.Str()
-    salario = fields.Float()
-    jefe_inmediato = fields.Str()
-    proyecto_id = fields.Int()
-    is_active = fields.Int()
+    nombre = fields.Str(allow_none=True)
+    correo = fields.Str(allow_none=True)  # cambiamos de Email a Str
+    contacto = fields.Int(allow_none=True)
+    direccion = fields.Str(allow_none=True)
+    salario = fields.Float(allow_none=True)
+    jefe_inmediato = fields.Str(allow_none=True)
+    proyecto_id = fields.Int(allow_none=True)
+
+    @validates("correo")
+    def validate_correo(self, value):
+        if not value:  # None o ""
+            return
+        if "@" not in value or "." not in value:
+            raise ValidationError("Correo inválido")
 
 
-# ============================================================
-#  ENTIDAD DINÁMICA (si quieres elegir campos)
-#  Ejemplo: EmployeeDynamicEntity(only=["id", "nombre"])
-# ============================================================
-class EmployeeDynamicEntity(Schema):
-    class Meta:
-        fields = ()  # Se setea dinámicamente
 
-    def __init__(self, only=None, **kwargs):
-        super().__init__(only=only, **kwargs)
+    

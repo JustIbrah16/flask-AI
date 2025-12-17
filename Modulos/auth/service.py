@@ -11,3 +11,6 @@ class AuthService:
         if not check_password_hash(user.password, password):
             return None
         return user
+
+    def forget_password(self, gmail):
+        pass
