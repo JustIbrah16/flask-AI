@@ -81,6 +81,7 @@ class Employee(db.Model):
     is_active = db.Column(db.Integer, default=1)  # 0: inactivo, 1: activo, 2: licencia
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    temp_pass = db.Column(db.Integer, default=1)  # Indica si la contraseña es temporal
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -135,5 +136,6 @@ class Employee(db.Model):
             'is_active': self.is_active,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            'temp_pass': self.temp_pass
         }
 

@@ -16,7 +16,6 @@ employee_create_model = employees_ns.model("EmployeeCreate", {
     "correo": fields.String(required=True),
 
     "username": fields.String(required=True),
-    "password": fields.String(required=True),
 
     "contacto": fields.Integer,
     "direccion": fields.String,

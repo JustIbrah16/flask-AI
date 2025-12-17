@@ -11,13 +11,6 @@ login_model = auth_ns.model('Login', {
     'password': fields.String(required=True, description='Password'),
 })
 
-register_model = auth_ns.model('Register', {
-    'username': fields.String(required=True),
-    'email': fields.String(required=True),
-    'password': fields.String(required=True),
-    'phone': fields.String(required=False),
-})
-
 # Response models
 login_response = auth_ns.model('LoginResponse', {
     'access_token': fields.String(description='JWT access token'),
@@ -58,10 +51,8 @@ class LoginResource(Resource):
             access_token = create_access_token(identity=user.id)
             if isinstance(access_token, bytes):
                 access_token = access_token.decode('utf-8')
+            temp_pass = user.temp_pass
             
-            cargo_nombre = user.cargo.name if user.cargo else 'N/A'
-            cargo =  cargo_nombre
-
             rol =  user.role_id
             if rol == 1:
                 rol = 'admin'
@@ -75,6 +66,7 @@ class LoginResource(Resource):
                 'user_id': user.id,
                 'username': user.username,
                 'role': rol,
+                'temp_pass': temp_pass
                
             }, 200
         except Exception as e:

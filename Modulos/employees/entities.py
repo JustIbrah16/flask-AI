@@ -68,6 +68,7 @@ class EmployeeDetailEntity(Schema):
 
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
+ 
 
 
 # ============================================================
@@ -79,7 +80,6 @@ class EmployeeCreateEntity(Schema):
     correo = fields.Email(required=True)
 
     username = fields.Str(required=True)
-    password = fields.Str(required=True, load_only=True)
 
     contacto = fields.Int()
     direccion = fields.Str()
@@ -114,6 +114,8 @@ class EmployeeCreateEntity(Schema):
     tipo_contrato_id = fields.Int()
 
     is_active = fields.Int(load_default=1)
+    temp_pass = fields.Int()
+    password = fields.Str() 
 
 
 # ============================================================

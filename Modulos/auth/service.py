@@ -13,4 +13,9 @@ class AuthService:
         return user
 
     def forget_password(self, gmail):
-        pass
+        user = EmployeeRepository.get_employee_by_email(gmail)
+        if not user:
+            return None
+        if user.temp_pass == 1:
+            return None
+        return user

@@ -1,4 +1,7 @@
 from Modulos.employees.repository import EmployeeRepository
+import random
+import string
+from Modulos.employees.models import Employee
 from Modulos.employees.entities import (
     EmployeeBriefEntity,
     EmployeeDetailEntity,
@@ -45,9 +48,40 @@ def map_detail(emp):
         "is_active": emp.is_active,
         "created_at": emp.created_at,
         "updated_at": emp.updated_at,
+        
     }
-
-
+def map_create(emp):
+    return {
+        "identificacion": emp.identificacion,
+        "nombre": emp.nombre,
+        "fecha_nacimiento": emp.fecha_nacimiento,
+        "correo": emp.correo,
+        "contacto": emp.contacto,
+        "direccion": emp.direccion,
+        "ciudad_id": emp.ciudad_id,
+        "cargo_id": emp.cargo_id,
+        "area_id": emp.area_id,
+        "role_id": emp.role_id,
+        "jefe_inmediato": emp.jefe_inmediato,
+        "tipo_contrato_id": emp.tipo_contrato_id,
+        "banco_id": emp.banco_id,
+        "numero_cuenta_bancaria": emp.numero_cuenta_bancaria,
+        "salario": emp.salario,
+        "fecha_ingreso": emp.fecha_ingreso,
+        "proyecto_id": emp.proyecto_id,
+        "genero_id": emp.genero_id,
+        "camisa_id": emp.camisa_id,
+        "pantalon": emp.pantalon,
+        "zapatos": emp.zapatos,
+        "abrigo_id": emp.abrigo_id,
+        "eps_id": emp.eps_id,
+        "arl_id": emp.arl_id,
+        "estudios": emp.estudios,
+        "estado_civil_id": emp.estado_civil_id,
+        "hijos": emp.hijos,
+        "username": emp.username,
+        "temp_pass": emp.temp_pass
+    }
 def map_brief(emp):
     return {
         "nombre": emp.nombre,
@@ -60,6 +94,12 @@ def map_brief(emp):
 # ============================================================
 # SERVICE
 # ============================================================
+class passwordGenerator:
+    @staticmethod
+    def generar_password_temporal(longitud=6):
+        caracteres = string.ascii_letters + string.digits
+        return ''.join(random.choice(caracteres) for _ in range(longitud))
+
 class EmployeeService:
 
     @staticmethod
@@ -89,30 +129,40 @@ class EmployeeService:
         if not emp:
             return None
         return EmployeeDetailEntity().dump(map_detail(emp))
-
+   
+   
+    
     @staticmethod
     def create(data):
         valid = EmployeeCreateEntity().load(data)
-        password = valid.pop("password")
+        password_temp = passwordGenerator.generar_password_temporal(6)
+        valid["temp_pass"] = 1
 
         emp = EmployeeRepository.create(valid)
-        emp.set_password(password)
+
+        emp.set_password(password_temp)
 
         EmployeeRepository.update(emp)
-        return EmployeeDetailEntity().dump(map_detail(emp))
+
+        
+        response = map_create(emp)
+        response["password"] = password_temp
+
+        return EmployeeCreateEntity().dump(response)
+        
+
 
     @staticmethod
     def update(emp_id, data):
         emp = EmployeeRepository.get_by_id(emp_id)
         if not emp:
             return None
-
-        # Validación parcial → solo valida los campos enviados
+            
         valid = EmployeeUpdateEntity().load(data, partial=True)
 
-        # Actualiza solo los campos que vienen
+            
         for k, v in valid.items():
-            setattr(emp, k, v)
+                setattr(emp, k, v)
 
         EmployeeRepository.update(emp)
         return EmployeeDetailEntity().dump(map_detail(emp))
@@ -124,4 +174,4 @@ class EmployeeService:
             return None
 
         emp = EmployeeRepository.soft_delete(emp)
-        return EmployeeDetailEntity().dump(map_detail(emp))
+        return EmployeeDetailEntity().dump(map_detail(emp))   
