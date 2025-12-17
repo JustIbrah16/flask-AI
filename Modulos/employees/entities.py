@@ -83,7 +83,6 @@ class EmployeeCreateEntity(Schema):
 
     contacto = fields.Int()
     direccion = fields.Str()
-    fecha_nacimiento = fields.Date()
 
     ciudad_id = fields.Int()
     cargo_id = fields.Int()
@@ -100,6 +99,11 @@ class EmployeeCreateEntity(Schema):
     genero_id = fields.Int()
     camisa_id = fields.Int()
     abrigo_id = fields.Int()
+    zapatos_id = fields.Int()
+    estudios_id = fields.Int()
+    pantalon_id = fields.Int()
+    fecha_de_ingreso = fields.Date()
+    fecha_nacimiento = fields.Date()
 
     eps_id = fields.Int()
     arl_id = fields.Int()
