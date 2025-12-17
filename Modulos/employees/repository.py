@@ -35,3 +35,8 @@ class EmployeeRepository:
         db.session.add(emp)
         db.session.commit()
         return emp
+
+    @staticmethod
+    def get_employee_by_username(username: str):
+        """Retorna un empleado por su username"""
+        return Employee.query.filter_by(username=username).first()
