@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restx import Api
 from config import Config
-from extensions import db, migrate, jwt
+from extensions import db, migrate, jwt, mail 
 from flask_cors import CORS
 
 from Modulos.auth.routes import auth_ns
@@ -32,6 +32,7 @@ def create_app(config_object=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    mail.init_app(app)
 
     # CORS CONFIG
     CORS(app,

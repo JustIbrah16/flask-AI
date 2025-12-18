@@ -16,3 +16,11 @@ class Config:
         'CORS_ORIGINS',
         'http://localhost:3000,http://localhost:4200,http://localhost:8080'
     ).split(',')
+
+
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = 'lfdelahozfontalvo@gmail.com'
+    MAIL_PASSWORD = 'wnqo xkbp iogg ywpe'
+    MAIL_DEFAULT_SENDER = 'lfdelahozfontalvo@gmail.com'

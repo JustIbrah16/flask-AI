@@ -1,13 +1,12 @@
 from Modulos.employees.repository import EmployeeRepository
+from Modulos.employees.models import Employee
+from Modulos.employees.entities import  EmployeeBriefEntity, EmployeeDetailEntity, EmployeeCreateEntity, EmployeeUpdateEntity
 import random
 import string
-from Modulos.employees.models import Employee
-from Modulos.employees.entities import (
-    EmployeeBriefEntity,
-    EmployeeDetailEntity,
-    EmployeeCreateEntity,
-    EmployeeUpdateEntity
-)
+from extensions import mail
+from flask_mail import Message
+from flask import current_app
+
 
 
 # ============================================================
@@ -134,21 +133,65 @@ class EmployeeService:
     
     @staticmethod
     def create(data):
+    # 1. Validación y generación de datos
         valid = EmployeeCreateEntity().load(data)
         password_temp = passwordGenerator.generar_password_temporal(6)
         valid["temp_pass"] = 1
 
+        # 2. Guardado en Base de Datos
         emp = EmployeeRepository.create(valid)
-
         emp.set_password(password_temp)
-
         EmployeeRepository.update(emp)
 
-        
+        # 3. ENVÍO DEL CORREO
+        try:
+            # Extraemos el email del objeto recién creado o de 'valid'
+            email_destinatario = emp.correo
+            username = emp.username # Asumiendo que emp tiene este atributo
+
+            msg = Message(
+                subject="Bienvenido a la Plataforma - Tus Credenciales",
+                recipients=[email_destinatario],
+                sender='lfdelahozfontalvo@gmail.com'
+            )
+            
+            msg.body = f"""
+            Hola {emp.nombre},
+            
+            Se ha creado tu cuenta en la plataforma. Estas son tus credenciales de acceso:
+            
+            Usuario: {username}
+            Contraseña: {password_temp}
+            
+            Por seguridad, te recomendamos cambiar tu contraseña al ingresar.
+            """
+            mail.send(msg)
+            
+        except Exception as e:
+            print(f"Error enviando correo: {str(e)}")
+
         response = map_create(emp)
         response["password"] = password_temp
 
         return EmployeeCreateEntity().dump(response)
+    
+    @staticmethod
+    def update_password(id, password):
+        emp = EmployeeRepository.get_by_id(id)
+        if not emp:
+            return None
+
+        if len(password) < 6:
+            raise ValueError("La contraseña debe tener al menos 6 caracteres")
+
+        if emp.temp_pass != 1:
+            raise ValueError("La contraseña no es temporal, no se puede actualizar de esta forma")
+
+        emp.set_password(password)
+        emp.temp_pass = 0 
+        EmployeeRepository.update(emp)
+        return True
+
         
 
 

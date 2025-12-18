@@ -9,7 +9,9 @@ employees_ns = Namespace("employees", description="Gestión de empleados")
 # =======================
 # Swagger Models
 # =======================
-
+password_model = employees_ns.model('UpdatePassword', {
+    'password': fields.String(required=True, description='La nueva contraseña del empleado')
+})
 employee_create_model = employees_ns.model("EmployeeCreate", {
     "nombre": fields.String(required=True),
     "identificacion": fields.Integer(required=True),
@@ -82,6 +84,21 @@ class Employees(Resource):
             "data": emp
         }, 201
 
+@employees_ns.route("/update-password/<int:emp_id>")
+class EmployeeUpdatePassword(Resource):
+    @employees_ns.expect(password_model)
+    def put(self, emp_id):
+        data = request.get_json()
+        password = data.get("password")
+        
+        if not password:
+            return {"message": "Contraseña no proporcionada"}, 400
+
+        success = EmployeeService.update_password(emp_id, password)
+        if not success:
+            return {"message": "Empleado no encontrado"}, 404
+
+        return {"message": "Contraseña actualizada correctamente"}, 200
 
 @employees_ns.route("/all")
 class EmployeesAll(Resource):

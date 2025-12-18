@@ -44,4 +44,4 @@ class EmployeeRepository:
     @staticmethod
     def get_employee_by_email(email: str):
         """Retorna un empleado por su email"""
-        return Employee.query.filter_by(email=email).first()
+        return Employee.query.filter_by(correo=email).first()

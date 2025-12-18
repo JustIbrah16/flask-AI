@@ -108,3 +108,36 @@ class LogoutResource(Resource):
                 'message': 'Error al cerrar sesión',
                 'error': str(e)
             }, 400
+
+
+@auth_ns.route('/forget-password')
+class ForgetPasswordResource(Resource):
+    @auth_ns.expect(auth_ns.model('ForgetPassword', {
+        'email': fields.String(required=True, description='User email')
+    }))
+    def post(self):
+        """Forget password endpoint - sends temporary password via email"""
+        try:
+            data = request.get_json() or {}
+            email = data.get('email')
+            if not email:
+                return {
+                    'message': 'El correo electrónico es requerido',
+                    'error': 'MISSING_EMAIL'
+                }, 400
+            
+            user = AuthService.forget_password(email)
+            if not user:
+                return {
+                    'message': 'Usuario no encontrado o ya tiene una contraseña temporal activa',
+                    'error': 'USER_NOT_FOUND_OR_TEMP_PASS_ACTIVE'
+                }, 404
+            
+            return {
+                'message': 'Se ha enviado una contraseña temporal a tu correo electrónico'
+            }, 200
+        except Exception as e:
+            return {
+                'message': 'Error al procesar la solicitud de recuperación de contraseña',
+                'error': str(e)
+            }, 500
