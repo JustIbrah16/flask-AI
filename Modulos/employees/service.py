@@ -95,7 +95,8 @@ def map_brief(emp):
 def map_jefes(emp):
     return {
         "id": emp.id,
-        "name": emp.nombre,}
+        "nombre": emp.nombre,
+    }
 
 
 # ============================================================
