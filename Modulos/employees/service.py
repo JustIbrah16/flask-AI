@@ -92,6 +92,10 @@ def map_brief(emp):
         "cargo": emp.cargo.name if emp.cargo else None, 
         "proyecto": emp.proyecto.name if emp.proyecto else None
     }
+def map_jefes(emp):
+    return {
+        "id": emp.id,
+        "nombre": emp.nombre,}
 
 
 # ============================================================
@@ -111,20 +115,16 @@ class EmployeeService:
         filters = {}
 
         if params:
-
-            # 🔹 Jefe inmediato
+           
             if params.get("jefe_id"):
                 filters["jefe_id"] = int(params.get("jefe_id"))
-
-            # 🔹 Proyecto
+     
             if params.get("proyecto_id"):
                 filters["proyecto_id"] = int(params.get("proyecto_id"))
-
-            # 🔹 Género
+     
             if params.get("genero_id"):
                 filters["genero_id"] = int(params.get("genero_id"))
 
-            # 🔹 Estado
             if params.get("is_active"):
                 filters["is_active"] = int(params.get("is_active"))
 
@@ -263,4 +263,12 @@ class EmployeeService:
             return None
 
         emp = EmployeeRepository.soft_delete(emp)
-        return EmployeeDetailEntity().dump(map_detail(emp))   
+        return EmployeeDetailEntity().dump(map_detail(emp))
+
+    @staticmethod
+    def get_employees_with_delegar_jefe():
+        """Obtiene todos los empleados que tienen permisos para delegar jefe"""
+        emps = EmployeeRepository.get_employees_with_delegar_jefe()
+        return EmployeeDetailEntity(many=True).dump(
+            [map_jefes(e) for e in emps]
+        )

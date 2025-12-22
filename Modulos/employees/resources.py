@@ -179,3 +179,14 @@ class EmployeeByIdentificacion(Resource):
         if not emp:
             return {"message": "Empleado no encontrado"}, 404
         return {"data": emp}, 200
+
+
+@employees_ns.route("/delegar-jefe/list")
+class EmployeesWithDelegarJefe(Resource):
+    def get(self):
+        """Obtiene todos los empleados autorizados para delegar jefe (delegar_jefe = 1)"""
+        emps = EmployeeService.get_employees_with_delegar_jefe()
+        return {
+            "message": "Listado de empleados autorizados para delegar jefe",
+            "data": emps
+        }, 200

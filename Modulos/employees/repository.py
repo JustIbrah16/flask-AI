@@ -13,25 +13,25 @@ class EmployeeRepository:
     def get_filtered(filters: dict):
         query = Employee.query
 
-        # 🔹 Jefe inmediato (employee → employee)
+      
         if "jefe_id" in filters:
             query = query.filter(
                 Employee.jefe_inmediato == filters["jefe_id"]
             )
 
-        # 🔹 Proyecto
+
         if "proyecto_id" in filters:
             query = query.filter(
                 Employee.proyecto_id == filters["proyecto_id"]
             )
 
-        # 🔹 Género
+   
         if "genero_id" in filters:
             query = query.filter(
                 Employee.genero_id == filters["genero_id"]
             )
 
-        # 🔹 Estado (activo / inactivo)
+    
         if "is_active" in filters:
             query = query.filter(
                 Employee.is_active == filters["is_active"]
@@ -39,7 +39,7 @@ class EmployeeRepository:
 
         return query.all()
     
-    
+
     @staticmethod
     def get_by_id(emp_id):
         return Employee.query.get(emp_id)
@@ -77,6 +77,11 @@ class EmployeeRepository:
     def get_employee_by_email(email: str):
  
         return Employee.query.filter_by(correo=email).first()
+
+    @staticmethod
+    def get_employees_with_delegar_jefe():
+        """Retorna todos los empleados que tengan delegar_jefe = 1"""
+        return Employee.query.filter_by(delegar_jefe=1).all()
 
     @staticmethod
     def get_count():
