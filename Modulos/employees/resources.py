@@ -28,7 +28,8 @@ employee_create_model = employees_ns.model("EmployeeCreate", {
     "role_id": fields.Integer,
     "proyecto_id": fields.Integer,
 
-    "jefe_inmediato": fields.String,
+    "delegar_jefe": fields.Integer,
+    "jefe_inmediato": fields.Integer,
     "salario": fields.Float,
 
     "banco_id": fields.Integer,
@@ -58,7 +59,7 @@ employee_update_model = employees_ns.model("EmployeeUpdate", {
     "contacto": fields.Integer,
     "direccion": fields.String,
     "salario": fields.Float,
-    "jefe_inmediato": fields.String,
+    "jefe_inmediato": fields.Integer,
     "proyecto_id": fields.Integer
 })
 
@@ -99,6 +100,18 @@ class EmployeeUpdatePassword(Resource):
             return {"message": "Empleado no encontrado"}, 404
 
         return {"message": "Contraseña actualizada correctamente"}, 200
+
+
+
+
+@employees_ns.route("/count")
+class EmployeeCount(Resource):
+    def get(self):
+        """Obtiene el número total de empleados registrados"""
+        total = EmployeeService.get_total_employees()
+        return {"total": total}, 200
+        
+
 
 @employees_ns.route("/all")
 class EmployeesAll(Resource):

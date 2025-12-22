@@ -79,6 +79,13 @@ class ReportDetail(Resource):
                 'error': str(e)
             }, 500
 
+    @reports_ns.route('/count')
+    class ReportCount(Resource):
+        def get(self):
+            """Obtiene el número total de reportes registrados"""
+            total = ReportsService.get_total_reports()
+            return {"total": total}, 200
+    
     @reports_ns.expect(report_model)
     def put(self, id):
         try:

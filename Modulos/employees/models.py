@@ -43,7 +43,8 @@ class Employee(db.Model):
     role = db.relationship('Role', backref='employees')
 
     # Contrato
-    jefe_inmediato = db.Column(db.String(120))
+    delegar_jefe = db.Column(db.Integer, default=0)  
+    jefe_inmediato = db.Column(db.Integer)
     tipo_contrato_id = db.Column(db.Integer, db.ForeignKey('contract_types.id'))
     tipo_contrato = db.relationship('ContractType', backref='employees')
     banco_id = db.Column(db.Integer, db.ForeignKey('banks.id'))

@@ -17,8 +17,11 @@ class EmployeeBaseEntity(Schema):
 class EmployeeBriefEntity(Schema):
     nombre = fields.Str()
     identificacion = fields.Int()
-    jefe_inmediato = fields.Str()
+    jefe_inmediato = fields.Int()
     proyecto = fields.Str()
+    cargo = fields.Str()
+    is_active = fields.Int()
+
 
 
 # ============================================================
@@ -90,7 +93,9 @@ class EmployeeCreateEntity(Schema):
     role_id = fields.Int()
     proyecto_id = fields.Int()
 
-    jefe_inmediato = fields.Str()
+
+    delegar_jefe = fields.Int()
+    jefe_inmediato = fields.Int()
     salario = fields.Float()
 
     numero_cuenta_bancaria = fields.Int()

@@ -25,6 +25,7 @@ def map_detail(emp):
         "cargo": emp.cargo.name if emp.cargo else None,
         "area": emp.area.name if emp.area else None,
         "role": emp.role.name if emp.role else None,
+        "delegar_jefe": emp.delegar_jefe,
         "jefe_inmediato": emp.jefe_inmediato,
         "tipo_contrato": emp.tipo_contrato.name if emp.tipo_contrato else None,
         "banco": emp.banco.name if emp.banco else None,
@@ -61,6 +62,7 @@ def map_create(emp):
         "cargo_id": emp.cargo_id,
         "area_id": emp.area_id,
         "role_id": emp.role_id,
+        "delegar_jefe": emp.delegar_jefe,
         "jefe_inmediato": emp.jefe_inmediato,
         "tipo_contrato_id": emp.tipo_contrato_id,
         "banco_id": emp.banco_id,
@@ -130,24 +132,39 @@ class EmployeeService:
         return EmployeeDetailEntity().dump(map_detail(emp))
    
    
+    @staticmethod
+    def get_total_employees():
+        count = EmployeeRepository.get_count()
+        return count
+
+    #validar si el numero que le pasas al momento de crear un cliente en el jefe inmediato tiene un 1 en el jefe o si existe 
+    @staticmethod
+    def validate_jefe_inmediato(jefe_id):
+        jefe = EmployeeRepository.get_by_id(jefe_id)
+        if not jefe or jefe.delegar_jefe != 1:
+            return False
+        return True
+    
     
     @staticmethod
     def create(data):
-    # 1. Validación y generación de datos
+
         valid = EmployeeCreateEntity().load(data)
         password_temp = passwordGenerator.generar_password_temporal(6)
         valid["temp_pass"] = 1
-
-        # 2. Guardado en Base de Datos
+        boss = EmployeeService.validate_jefe_inmediato(valid["jefe_inmediato"])
+        if not boss:
+            raise ValueError("El jefe inmediato no es válido o no está autorizado para delegar.")
+              
         emp = EmployeeRepository.create(valid)
         emp.set_password(password_temp)
         EmployeeRepository.update(emp)
 
-        # 3. ENVÍO DEL CORREO
+
         try:
-            # Extraemos el email del objeto recién creado o de 'valid'
+         
             email_destinatario = emp.correo
-            username = emp.username # Asumiendo que emp tiene este atributo
+            username = emp.username 
 
             msg = Message(
                 subject="Bienvenido a la Plataforma - Tus Credenciales",
@@ -175,6 +192,8 @@ class EmployeeService:
 
         return EmployeeCreateEntity().dump(response)
     
+
+
     @staticmethod
     def update_password(id, password):
         emp = EmployeeRepository.get_by_id(id)

@@ -32,3 +32,8 @@ class ReportRepository:
     def delete(report):
         db.session.delete(report)
         db.session.commit()
+
+
+    @staticmethod
+    def get_count():
+        return db.session.query(Report).count()

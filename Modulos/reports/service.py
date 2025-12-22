@@ -59,3 +59,8 @@ class ReportsService:
             return None
         ReportRepository.delete(report)
         return report_id
+
+    @staticmethod
+    def get_total_reports():
+        count = ReportRepository.get_count()
+        return count
