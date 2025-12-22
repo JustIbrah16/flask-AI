@@ -187,6 +187,6 @@ class EmployeesWithDelegarJefe(Resource):
         """Obtiene todos los empleados autorizados para delegar jefe (delegar_jefe = 1)"""
         emps = EmployeeService.get_employees_with_delegar_jefe()
         return {
-            "message": "Listado de empleados autorizados para delegar jefe",
+          
             "data": emps
         }, 200
