@@ -88,6 +88,8 @@ def map_brief(emp):
         "nombre": emp.nombre,
         "identificacion": emp.identificacion,
         "jefe_inmediato": emp.jefe_inmediato,
+        "is_active": "activo" if emp.is_active else "inactivo",
+        "cargo": emp.cargo.name if emp.cargo else None, 
         "proyecto": emp.proyecto.name if emp.proyecto else None
     }
 
@@ -104,8 +106,33 @@ class passwordGenerator:
 class EmployeeService:
 
     @staticmethod
-    def list_brief():
-        emps = EmployeeRepository.get_all()
+    def list_brief(params=None):
+
+        filters = {}
+
+        if params:
+
+            # 🔹 Jefe inmediato
+            if params.get("jefe_id"):
+                filters["jefe_id"] = int(params.get("jefe_id"))
+
+            # 🔹 Proyecto
+            if params.get("proyecto_id"):
+                filters["proyecto_id"] = int(params.get("proyecto_id"))
+
+            # 🔹 Género
+            if params.get("genero_id"):
+                filters["genero_id"] = int(params.get("genero_id"))
+
+            # 🔹 Estado
+            if params.get("is_active"):
+                filters["is_active"] = int(params.get("is_active"))
+
+        if filters:
+            emps = EmployeeRepository.get_filtered(filters)
+        else:
+            emps = EmployeeRepository.get_all()
+
         return EmployeeBriefEntity(many=True).dump(
             [map_brief(e) for e in emps]
         )

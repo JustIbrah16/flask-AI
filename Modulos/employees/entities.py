@@ -20,7 +20,7 @@ class EmployeeBriefEntity(Schema):
     jefe_inmediato = fields.Int()
     proyecto = fields.Str()
     cargo = fields.Str()
-    is_active = fields.Int()
+    is_active = fields.Str()
 
 
 

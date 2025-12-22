@@ -131,7 +131,7 @@ class ForgetPasswordResource(Resource):
                 return {
                     'message': 'Usuario no encontrado o ya tiene una contraseña temporal activa',
                     'error': 'USER_NOT_FOUND_OR_TEMP_PASS_ACTIVE'
-                }, 404
+                }, 400
             
             return {
                 'message': 'Se ha enviado una contraseña temporal a tu correo electrónico'

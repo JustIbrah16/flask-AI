@@ -69,11 +69,23 @@ employee_update_model = employees_ns.model("EmployeeUpdate", {
 
 @employees_ns.route("/")
 class Employees(Resource):
+    @employees_ns.param(
+        "jefe_id", "ID del jefe inmediato", type=int, required=False
+    )
+    @employees_ns.param(
+        "proyecto_id", "ID del proyecto", type=int, required=False
+    )
+    @employees_ns.param(
+        "genero_id", "ID del género", type=int, required=False
+    )
+    @employees_ns.param(
+        "is_active", "Estado (1=activo, 0=inactivo)", type=int, required=False
+    )
 
     def get(self):
         return {
-            "message": "Listado resumido",
-            "data": EmployeeService.list_brief()
+            "message": "Listado de empleados resumido",
+            "data": EmployeeService.list_brief(request.args)
         }, 200
 
     @employees_ns.expect(employee_create_model, validate=True)
