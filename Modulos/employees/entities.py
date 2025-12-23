@@ -18,7 +18,7 @@ class EmployeeBriefEntity(Schema):
     id = fields.Int()
     name = fields.Str()
     identification = fields.Int()
-    boss_id = fields.Int()
+    boss_name = fields.Str(allow_none=True)
     project = fields.Str()
     position = fields.Str()
     is_active = fields.Str()

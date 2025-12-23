@@ -84,11 +84,17 @@ def map_create(emp):
         "temp_pass": emp.temp_pass
     }
 def map_brief(emp):
+    # Get boss name by querying the employee with boss_id
+    boss_name = None
+    if emp.boss_id:
+        boss = EmployeeRepository.get_by_id(emp.boss_id)
+        boss_name = boss.name if boss else None
+    
     return {
         "id": emp.id,
         "name": emp.name,
         "identification": emp.identification,
-        "boss_id": emp.boss_id if emp.boss_id else None,
+        "boss_name": boss_name,
         "is_active": "activo" if emp.is_active else "inactivo",
         "position": emp.position.name if emp.position else None, 
         "project": emp.project.name if emp.project else None
