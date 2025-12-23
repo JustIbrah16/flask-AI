@@ -8,7 +8,7 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
         load_instance = True
         include_fk = True
         # Excluir las relaciones del auto-schema para evitar problemas de serialización
-        exclude = ('ciudad', 'cargo', 'area', 'tipo_contrato', 'banco', 'proyecto', 'genero', 'camisa', 'abrigo', 'eps', 'estado_civil', 'role')
+        exclude = ('city', 'position', 'area', 'contract_type', 'bank', 'project', 'gender', 'shirt_size', 'coat_size', 'eps', 'marital_status', 'role')
     
     # ========================================================================
     # Orden según tabla employees en database_schema.sql
@@ -18,60 +18,60 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
     id = fields.Integer(dump_only=True)
     
     # Información Personal
-    identificacion = fields.Integer(required=True)
-    nombre = fields.Str(required=True)
-    fecha_nacimiento = fields.Date(allow_none=True)
-    correo = fields.Email(required=True)
-    contacto = fields.Integer(allow_none=True)
+    identification = fields.Integer(required=True)
+    name = fields.Str(required=True)
+    date_of_birth = fields.Date(allow_none=True)
+    email = fields.Email(required=True)
+    phone = fields.Integer(allow_none=True)
     
     # Dirección
-    direccion = fields.Str(allow_none=True)
-    ciudad_id = fields.Integer(allow_none=True)
-    ciudad = fields.Function(lambda obj: obj.ciudad.name if obj.ciudad else None, dump_only=True)
+    address = fields.Str(allow_none=True)
+    city_id = fields.Integer(allow_none=True)
+    city = fields.Function(lambda obj: obj.city.name if obj.city else None, dump_only=True)
     
     # Información Laboral
-    cargo_id = fields.Integer(allow_none=True)
-    cargo = fields.Function(lambda obj: obj.cargo.name if obj.cargo else None, dump_only=True)
+    position_id = fields.Integer(allow_none=True)
+    position = fields.Function(lambda obj: obj.position.name if obj.position else None, dump_only=True)
     area_id = fields.Integer(allow_none=True)
     area = fields.Function(lambda obj: obj.area.name if obj.area else None, dump_only=True)
     role_id = fields.Integer(allow_none=True)
     
     # Contrato
-    jefe_inmediato = fields.Str(allow_none=True)
-    tipo_contrato_id = fields.Integer(allow_none=True)
-    tipo_contrato = fields.Function(lambda obj: obj.tipo_contrato.name if obj.tipo_contrato else None, dump_only=True)
-    banco_id = fields.Integer(allow_none=True)
-    banco = fields.Function(lambda obj: obj.banco.name if obj.banco else None, dump_only=True)
-    numero_cuenta_bancaria = fields.Integer(allow_none=True)
-    salario = fields.Float(allow_none=True)
+    boss_id = fields.Int(allow_none=True)
+    contract_type_id = fields.Integer(allow_none=True)
+    contract_type = fields.Function(lambda obj: obj.contract_type.name if obj.contract_type else None, dump_only=True)
+    bank_id = fields.Integer(allow_none=True)
+    bank = fields.Function(lambda obj: obj.bank.name if obj.bank else None, dump_only=True)
+    account_number = fields.Integer(allow_none=True)
+    salary = fields.Float(allow_none=True)
     
     # Información Adicional
-    fecha_ingreso = fields.Date(allow_none=True)
-    proyecto_id = fields.Integer(allow_none=True)
-    proyecto = fields.Function(lambda obj: obj.proyecto.name if obj.proyecto else None, dump_only=True)
-    estado = fields.Str(allow_none=True)
-    genero_id = fields.Integer(allow_none=True)
-    genero = fields.Function(lambda obj: obj.genero.name if obj.genero else None, dump_only=True)
+    entry_date = fields.Date(allow_none=True)
+    project_id = fields.Integer(allow_none=True)
+    project = fields.Function(lambda obj: obj.project.name if obj.project else None, dump_only=True)
+    state = fields.Str(allow_none=True)
+    gender_id = fields.Integer(allow_none=True)
+    gender = fields.Function(lambda obj: obj.gender.name if obj.gender else None, dump_only=True)
     
     # Tallas
-    camisa_id = fields.Integer(allow_none=True)
-    camisa = fields.Function(lambda obj: obj.camisa.name if obj.camisa else None, dump_only=True)
-    pantalon = fields.Integer(allow_none=True)
-    zapatos = fields.Integer(allow_none=True)
-    abrigo_id = fields.Integer(allow_none=True)
-    abrigo = fields.Function(lambda obj: obj.abrigo.name if obj.abrigo else None, dump_only=True)
+    shirt_size_id = fields.Integer(allow_none=True)
+    shirt_size = fields.Function(lambda obj: obj.shirt_size.name if obj.shirt_size else None, dump_only=True)
+    pants_size = fields.Integer(allow_none=True)
+    shoes_size = fields.Integer(allow_none=True)
+    coat_size_id = fields.Integer(allow_none=True)
+    coat_size = fields.Function(lambda obj: obj.coat_size.name if obj.coat_size else None, dump_only=True)
     
     # Salud y Estudios
     eps_id = fields.Integer(allow_none=True)
     eps = fields.Function(lambda obj: obj.eps.name if obj.eps else None, dump_only=True)
     arl_id = fields.Integer(allow_none=True)
     arl = fields.Function(lambda obj: obj.arl.name if obj.arl else None, dump_only=True)
-    estudios = fields.Str(allow_none=True)
+    studies = fields.Str(allow_none=True)
     
     # Estado Civil
-    estado_civil_id = fields.Integer(allow_none=True)
-    estado_civil = fields.Function(lambda obj: obj.estado_civil.name if obj.estado_civil else None, dump_only=True)
-    hijos = fields.Integer(allow_none=True)
+    marital_status_id = fields.Integer(allow_none=True)
+    marital_status = fields.Function(lambda obj: obj.marital_status.name if obj.marital_status else None, dump_only=True)
+    children = fields.Integer(allow_none=True)
     
     # Sistema
     username = fields.Str(required=True)

@@ -29,7 +29,7 @@ class AuthService:
         EmployeeRepository.update(user)
 
         try:
-            email_destinatario = user.correo
+            email_destinatario = user.email
             msg = Message(
                 subject="Recuperación de Contraseña",
                 recipients=[email_destinatario],
@@ -37,7 +37,7 @@ class AuthService:
             )
 
             msg.body = f"""
-            Hola {user.nombre},
+            Hola {user.name},
             
             Se ha generado una nueva contraseña temporal para tu cuenta:
             

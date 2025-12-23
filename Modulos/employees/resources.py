@@ -13,54 +13,54 @@ password_model = employees_ns.model('UpdatePassword', {
     'password': fields.String(required=True, description='La nueva contraseña del empleado')
 })
 employee_create_model = employees_ns.model("EmployeeCreate", {
-    "nombre": fields.String(required=True),
-    "identificacion": fields.Integer(required=True),
-    "correo": fields.String(required=True),
+    "name": fields.String(required=True),
+    "identification": fields.Integer(required=True),
+    "email": fields.String(required=True),
 
     "username": fields.String(required=True),
 
-    "contacto": fields.Integer,
-    "direccion": fields.String,
+    "phone": fields.Integer,
+    "address": fields.String,
 
-    "ciudad_id": fields.Integer,
-    "cargo_id": fields.Integer,
+    "city_id": fields.Integer,
+    "position_id": fields.Integer,
     "area_id": fields.Integer,
     "role_id": fields.Integer,
-    "proyecto_id": fields.Integer,
+    "project_id": fields.Integer,
 
-    "delegar_jefe": fields.Integer,
-    "jefe_inmediato": fields.Integer,
-    "salario": fields.Float,
+    "is_boss": fields.Integer,
+    "boss_id": fields.Integer,
+    "salary": fields.Float,
 
-    "banco_id": fields.Integer,
-    "numero_cuenta_bancaria": fields.Integer,
+    "bank_id": fields.Integer,
+    "account_number": fields.Integer,
 
-    "genero_id": fields.Integer,
-    "camisa_id": fields.Integer,
-    "abrigo_id": fields.Integer,
-    "zapatos": fields.Integer,
-    "estudios": fields.String,
-    "pantalon": fields.Integer,
-    "fecha_ingreso": fields.Date,
-    "fecha_nacimiento": fields.Date,
+    "gender_id": fields.Integer,
+    "shirt_size_id": fields.Integer,
+    "coat_size_id": fields.Integer,
+    "shoes_size": fields.Integer,
+    "studies": fields.String,
+    "pants_size": fields.Integer,
+    "entry_date": fields.Date,
+    "date_of_birth": fields.Date,
 
     "eps_id": fields.Integer,
     "arl_id": fields.Integer,
 
-    "estado_civil_id": fields.Integer,
-    "hijos": fields.Integer,
+    "marital_status_id": fields.Integer,
+    "children": fields.Integer,
 
-    "tipo_contrato_id": fields.Integer
+    "contract_type_id": fields.Integer
 })
 
 employee_update_model = employees_ns.model("EmployeeUpdate", {
-    "nombre": fields.String,
-    "correo": fields.String,
-    "contacto": fields.Integer,
-    "direccion": fields.String,
-    "salario": fields.Float,
-    "jefe_inmediato": fields.Integer,
-    "proyecto_id": fields.Integer
+    "name": fields.String,
+    "email": fields.String,
+    "phone": fields.Integer,
+    "address": fields.String,
+    "salary": fields.Float,
+    "boss_id": fields.Integer,
+    "project_id": fields.Integer
 })
 
 # =======================
@@ -70,13 +70,13 @@ employee_update_model = employees_ns.model("EmployeeUpdate", {
 @employees_ns.route("/")
 class Employees(Resource):
     @employees_ns.param(
-        "jefe_id", "ID del jefe inmediato", type=int, required=False
+        "boss_id", "ID del jefe inmediato", type=int, required=False
     )
     @employees_ns.param(
-        "proyecto_id", "ID del proyecto", type=int, required=False
+        "project_id", "ID del proyecto", type=int, required=False
     )
     @employees_ns.param(
-        "genero_id", "ID del género", type=int, required=False
+        "gender_id", "ID del género", type=int, required=False
     )
     @employees_ns.param(
         "is_active", "Estado (1=activo, 0=inactivo)", type=int, required=False
@@ -171,11 +171,11 @@ class EmployeeById(Resource):
         }, 200
 
 
-@employees_ns.route("/identificacion/<int:identificacion>")
-class EmployeeByIdentificacion(Resource):
+@employees_ns.route("/identification/<int:identification>")
+class EmployeeByIdentification(Resource):
 
-    def get(self, identificacion):
-        emp = EmployeeService.get_by_identificacion(identificacion)
+    def get(self, identification):
+        emp = EmployeeService.get_by_identification(identification)
         if not emp:
             return {"message": "Empleado no encontrado"}, 404
         return {"data": emp}, 200

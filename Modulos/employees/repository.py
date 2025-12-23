@@ -14,21 +14,21 @@ class EmployeeRepository:
         query = Employee.query
 
       
-        if "jefe_id" in filters:
+        if "boss_id" in filters:
             query = query.filter(
-                Employee.jefe_inmediato == filters["jefe_id"]
+                Employee.boss_id == filters["boss_id"]
             )
 
 
-        if "proyecto_id" in filters:
+        if "project_id" in filters:
             query = query.filter(
-                Employee.proyecto_id == filters["proyecto_id"]
+                Employee.project_id == filters["project_id"]
             )
 
    
-        if "genero_id" in filters:
+        if "gender_id" in filters:
             query = query.filter(
-                Employee.genero_id == filters["genero_id"]
+                Employee.gender_id == filters["gender_id"]
             )
 
     
@@ -45,8 +45,8 @@ class EmployeeRepository:
         return Employee.query.get(emp_id)
 
     @staticmethod
-    def get_by_identificacion(identificacion):
-        return Employee.query.filter_by(identificacion=identificacion).first()
+    def get_by_identification(identification):
+        return Employee.query.filter_by(identification=identification).first()
 
     @staticmethod
     def create(data):
@@ -75,13 +75,12 @@ class EmployeeRepository:
 
     @staticmethod
     def get_employee_by_email(email: str):
- 
-        return Employee.query.filter_by(correo=email).first()
+        return Employee.query.filter_by(email=email).first()
 
     @staticmethod
     def get_employees_with_delegar_jefe():
         """Retorna todos los empleados que tengan delegar_jefe = 1"""
-        return Employee.query.filter_by(delegar_jefe=1).all()
+        return Employee.query.filter_by(is_boss=1).all()
 
     @staticmethod
     def get_count():

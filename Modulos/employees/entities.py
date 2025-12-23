@@ -6,8 +6,8 @@ from marshmallow import Schema, fields,validates, ValidationError
 # ============================================================
 class EmployeeBaseEntity(Schema):
     id = fields.Int()
-    nombre = fields.Str()
-    identificacion = fields.Int()
+    name = fields.Str()
+    identification = fields.Int()
     is_active = fields.Int()
 
 
@@ -15,11 +15,11 @@ class EmployeeBaseEntity(Schema):
 # RESUMEN
 # ============================================================
 class EmployeeBriefEntity(Schema):
-    nombre = fields.Str()
-    identificacion = fields.Int()
-    jefe_inmediato = fields.Int()
-    proyecto = fields.Str()
-    cargo = fields.Str()
+    name = fields.Str()
+    identification = fields.Int()
+    boss_id = fields.Int()
+    project = fields.Str()
+    position = fields.Str()
     is_active = fields.Str()
 
 
@@ -29,42 +29,42 @@ class EmployeeBriefEntity(Schema):
 # ============================================================
 class EmployeeDetailEntity(Schema):
     id = fields.Int()
-    identificacion = fields.Int()
-    nombre = fields.Str()
-    fecha_nacimiento = fields.Date(allow_none=True)
-    correo = fields.Str()
-    contacto = fields.Int(allow_none=True)
+    identification = fields.Int()
+    name = fields.Str()
+    date_of_birth = fields.Date(allow_none=True)
+    email = fields.Str()
+    phone = fields.Int(allow_none=True)
 
-    direccion = fields.Str(allow_none=True)
-    ciudad = fields.Str(allow_none=True)
+    address = fields.Str(allow_none=True)
+    city = fields.Str(allow_none=True)
 
-    cargo = fields.Str(allow_none=True)
+    position = fields.Str(allow_none=True)
     area = fields.Str(allow_none=True)
     role = fields.Str(allow_none=True)
 
-    jefe_inmediato = fields.Str(allow_none=True)
-    tipo_contrato = fields.Str(allow_none=True)
+    boss_id = fields.Str(allow_none=True)
+    contract_type = fields.Str(allow_none=True)
 
-    banco = fields.Str(allow_none=True)
-    numero_cuenta_bancaria = fields.Int(allow_none=True)
-    salario = fields.Float(allow_none=True)
+    bank = fields.Str(allow_none=True)
+    account_number = fields.Int(allow_none=True)
+    salary = fields.Float(allow_none=True)
 
-    fecha_ingreso = fields.Date(allow_none=True)
-    proyecto = fields.Str(allow_none=True)
-    estado = fields.Str()
+    entry_date = fields.Date(allow_none=True)
+    project = fields.Str(allow_none=True)
+    state = fields.Str()
 
-    genero = fields.Str(allow_none=True)
-    camisa = fields.Str(allow_none=True)
-    pantalon = fields.Int(allow_none=True)
-    zapatos = fields.Int(allow_none=True)
-    abrigo = fields.Str(allow_none=True)
+    gender = fields.Str(allow_none=True)
+    shirt_size = fields.Str(allow_none=True)
+    pants_size = fields.Int(allow_none=True)
+    shoes_size = fields.Int(allow_none=True)
+    coat_size = fields.Str(allow_none=True)
 
     eps = fields.Str(allow_none=True)
     arl = fields.Str(allow_none=True)
-    estudios = fields.Str(allow_none=True)
+    studies = fields.Str(allow_none=True)
 
-    estado_civil = fields.Str(allow_none=True)
-    hijos = fields.Int(allow_none=True)
+    marital_status = fields.Str(allow_none=True)
+    children = fields.Int(allow_none=True)
 
     username = fields.Str()
     is_active = fields.Int()
@@ -78,45 +78,45 @@ class EmployeeDetailEntity(Schema):
 # CREATE
 # ============================================================
 class EmployeeCreateEntity(Schema):
-    nombre = fields.Str(required=True)
-    identificacion = fields.Int(required=True)
-    correo = fields.Email(required=True)
+    name = fields.Str(required=True)
+    identification = fields.Int(required=True)
+    email = fields.Email(required=True)
 
     username = fields.Str(required=True)
 
-    contacto = fields.Int()
-    direccion = fields.Str()
+    phone = fields.Int()
+    address = fields.Str()
 
-    ciudad_id = fields.Int()
-    cargo_id = fields.Int()
+    city_id = fields.Int()
+    position_id = fields.Int()
     area_id = fields.Int()
     role_id = fields.Int()
-    proyecto_id = fields.Int()
+    project_id = fields.Int()
 
 
-    delegar_jefe = fields.Int()
-    jefe_inmediato = fields.Int()
-    salario = fields.Float()
+    is_boss = fields.Int()
+    boss_id = fields.Int()
+    salary = fields.Float()
 
-    numero_cuenta_bancaria = fields.Int()
-    banco_id = fields.Int()
+    account_number = fields.Int()
+    bank_id = fields.Int()
 
-    genero_id = fields.Int()
-    camisa_id = fields.Int()
-    abrigo_id = fields.Int()
-    zapatos = fields.Int()
-    estudios = fields.Str()
-    pantalon = fields.Int()
-    fecha_ingreso = fields.Date()
-    fecha_nacimiento = fields.Date()
+    gender_id = fields.Int()
+    shirt_size_id = fields.Int()
+    coat_size_id = fields.Int()
+    shoes_size = fields.Int()
+    studies = fields.Str()
+    pants_size = fields.Int()
+    entry_date = fields.Date()
+    date_of_birth = fields.Date()
 
     eps_id = fields.Int()
     arl_id = fields.Int()
 
-    estado_civil_id = fields.Int()
-    hijos = fields.Int()
+    marital_status_id = fields.Int()
+    children = fields.Int()
 
-    tipo_contrato_id = fields.Int()
+    contract_type_id = fields.Int()
 
     is_active = fields.Int(load_default=1)
     temp_pass = fields.Int()
@@ -127,16 +127,16 @@ class EmployeeCreateEntity(Schema):
 # UPDATE
 # ============================================================
 class EmployeeUpdateEntity(Schema):
-    nombre = fields.Str(allow_none=True)
-    correo = fields.Str(allow_none=True)  # cambiamos de Email a Str
-    contacto = fields.Int(allow_none=True)
-    direccion = fields.Str(allow_none=True)
-    salario = fields.Float(allow_none=True)
-    jefe_inmediato = fields.Str(allow_none=True)
-    proyecto_id = fields.Int(allow_none=True)
+    name = fields.Str(allow_none=True)
+    email = fields.Str(allow_none=True)  # cambiamos de Email a Str
+    phone = fields.Int(allow_none=True)
+    address = fields.Str(allow_none=True)
+    salary = fields.Float(allow_none=True)
+    boss_id = fields.Str(allow_none=True)
+    project_id = fields.Int(allow_none=True)
 
-    @validates("correo")
-    def validate_correo(self, value):
+    @validates("email")
+    def validate_email(self, value):
         if not value:  # None o ""
             return
         if "@" not in value or "." not in value:

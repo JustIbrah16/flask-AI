@@ -21,60 +21,60 @@ class Employee(db.Model):
 
     # Identificación
     id = db.Column(db.Integer, primary_key=True)
-    identificacion = db.Column(db.BigInteger, unique=True)  # Identificación / número de empleado
+    identification = db.Column(db.BigInteger, unique=True)  # Identificación / número de empleado
 
     # Información Personal
-    nombre = db.Column(db.String(120), nullable=False)
-    fecha_nacimiento = db.Column(db.Date)
-    correo = db.Column(db.String(120), unique=True)
-    contacto = db.Column(db.BigInteger)  # Teléfono
+    name = db.Column(db.String(120), nullable=False)
+    date_of_birth = db.Column(db.Date)
+    email = db.Column(db.String(120), unique=True)
+    phone = db.Column(db.BigInteger)  # Teléfono
 
     # Dirección
-    direccion = db.Column(db.String(255))
-    ciudad_id = db.Column(db.Integer, db.ForeignKey('cities.id'))
-    ciudad = db.relationship('City', backref='employees')
+    address = db.Column(db.String(255))
+    city_id = db.Column(db.Integer, db.ForeignKey('cities.id'))
+    city = db.relationship('City', backref='employees')
 
     # Información Laboral
-    cargo_id = db.Column(db.Integer, db.ForeignKey('positions.id'))
-    cargo = db.relationship('Position', backref='employees')
+    position_id = db.Column(db.Integer, db.ForeignKey('positions.id'))
+    position = db.relationship('Position', backref='employees')
     area_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
     area = db.relationship('Area', backref='employees')
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     role = db.relationship('Role', backref='employees')
 
     # Contrato
-    delegar_jefe = db.Column(db.Integer, default=0)  
-    jefe_inmediato = db.Column(db.Integer)
-    tipo_contrato_id = db.Column(db.Integer, db.ForeignKey('contract_types.id'))
-    tipo_contrato = db.relationship('ContractType', backref='employees')
-    banco_id = db.Column(db.Integer, db.ForeignKey('banks.id'))
-    banco = db.relationship('Bank', backref='employees')
-    numero_cuenta_bancaria = db.Column(db.BigInteger, unique=True)
-    salario = db.Column(db.Float)
+    is_boss = db.Column(db.Integer, default=0)  
+    boss_id = db.Column(db.Integer)
+    contract_type_id = db.Column(db.Integer, db.ForeignKey('contract_types.id'))
+    contract_type = db.relationship('ContractType', backref='employees')
+    bank_id = db.Column(db.Integer, db.ForeignKey('banks.id'))
+    bank = db.relationship('Bank', backref='employees')
+    account_number = db.Column(db.BigInteger, unique=True)
+    salary = db.Column(db.Float)
 
     # Información Adicional
-    fecha_ingreso = db.Column(db.Date)
-    proyecto_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
-    proyecto = db.relationship('Project', backref='employees')
-    estado = db.Column(db.String(20), default='activo')  # activo, inactivo, licencia
-    genero_id = db.Column(db.Integer, db.ForeignKey('genders.id'))
-    genero = db.relationship('Gender', backref='employees')
-    camisa_id = db.Column(db.Integer, db.ForeignKey('sizes.id'))
-    camisa = db.relationship('Size', foreign_keys=[camisa_id], backref='employees_camisa')
-    pantalon = db.Column(db.Integer)
-    zapatos = db.Column(db.Integer)
-    abrigo_id = db.Column(db.Integer, db.ForeignKey('sizes.id'))
-    abrigo = db.relationship('Size', foreign_keys=[abrigo_id], backref='employees_abrigo')
+    entry_date = db.Column(db.Date)
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    project = db.relationship('Project', backref='employees')
+    state = db.Column(db.String(20), default='activo')  # activo, inactivo, licencia
+    gender_id = db.Column(db.Integer, db.ForeignKey('genders.id'))
+    gender = db.relationship('Gender', backref='employees')
+    shirt_size_id = db.Column(db.Integer, db.ForeignKey('sizes.id'))
+    shirt_size = db.relationship('Size', foreign_keys=[shirt_size_id], backref='employees_size')
+    pants_size = db.Column(db.Integer)
+    shoes_size = db.Column(db.Integer)
+    coat_size_id = db.Column(db.Integer, db.ForeignKey('sizes.id'))
+    coat_size = db.relationship('Size', foreign_keys=[coat_size_id], backref='employees_coat')
     eps_id = db.Column(db.Integer, db.ForeignKey('eps_providers.id'))
     eps = db.relationship('EPS', backref='employees')
     arl_id = db.Column(db.Integer, db.ForeignKey('arl_providers.id'))
     arl = db.relationship('ARL', backref='employees')
 
     # Estudios
-    estudios = db.Column(db.Text)  # Información de estudios
-    estado_civil_id = db.Column(db.Integer, db.ForeignKey('marital_statuses.id'))
-    estado_civil = db.relationship('MaritalStatus', backref='employees')
-    hijos = db.Column(db.Integer, default=0)
+    studies = db.Column(db.Text)  # Información de estudios
+    marital_status_id = db.Column(db.Integer, db.ForeignKey('marital_statuses.id'))
+    marital_status = db.relationship('MaritalStatus', backref='employees')
+    children = db.Column(db.Integer, default=0)
 
     # Sistema
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -94,46 +94,46 @@ class Employee(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'identificacion': self.identificacion,
-            'nombre': self.nombre,
-            'fecha_nacimiento': self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
-            'correo': self.correo,
-            'contacto': self.contacto,
-            'direccion': self.direccion,
-            'ciudad_id': self.ciudad_id,
-            'ciudad': self.ciudad.name if self.ciudad else None,
-            'cargo_id': self.cargo_id,
-            'cargo': self.cargo.name if self.cargo else None,
+            'identification': self.identification,
+            'name': self.name,
+            'date_of_birth': self.date_of_birth.isoformat() if self.date_of_birth else None,
+            'email': self.email,
+            'phone': self.phone,
+            'address': self.address,
+            'city_id': self.city_id,
+            'city': self.city.name if self.city else None,
+            'position_id': self.position_id,
+            'position': self.position.name if self.position else None,
             'area_id': self.area_id,
             'area': self.area.name if self.area else None,
             'role_id': self.role_id,
-            'jefe_inmediato': self.jefe_inmediato,
-            'tipo_contrato_id': self.tipo_contrato_id,
-            'tipo_contrato': self.tipo_contrato.name if self.tipo_contrato else None,
-            'banco_id': self.banco_id,
-            'banco': self.banco.name if self.banco else None,
-            'numero_cuenta_bancaria': self.numero_cuenta_bancaria,
-            'salario': self.salario,
-            'fecha_ingreso': self.fecha_ingreso.isoformat() if self.fecha_ingreso else None,
-            'proyecto_id': self.proyecto_id,
-            'proyecto': self.proyecto.name if self.proyecto else None,
-            'estado': self.estado,
-            'genero_id': self.genero_id,
-            'genero': self.genero.name if self.genero else None,
-            'camisa_id': self.camisa_id,
-            'camisa': self.camisa.name if self.camisa else None,
-            'pantalon': self.pantalon,
-            'zapatos': self.zapatos,
-            'abrigo_id': self.abrigo_id,
-            'abrigo': self.abrigo.name if self.abrigo else None,
+            'boss_id': self.boss_id,
+            'contract_type_id': self.contract_type_id,
+            'contract_type': self.contract_type.name if self.contract_type else None,
+            'bank_id': self.bank_id,
+            'bank': self.bank.name if self.bank else None,
+            'account_number': self.account_number,
+            'salary': self.salary,
+            'entry_date': self.entry_date.isoformat() if self.entry_date else None,
+            'project_id': self.project_id,
+            'project': self.project.name if self.project else None,
+            'state': self.state,
+            'gender_id': self.gender_id,
+            'gender': self.gender.name if self.gender else None,
+            'shirt_size_id': self.shirt_size_id,
+            'shirt_size': self.shirt_size.name if self.shirt_size else None,
+            'pants_size': self.pants_size,
+            'shoes_size': self.shoes_size,
+            'coat_size_id': self.coat_size_id,
+            'coat_size': self.coat_size.name if self.coat_size else None,
             'eps_id': self.eps_id,
             'eps': self.eps.name if self.eps else None,
             'arl_id': self.arl_id,
             'arl': self.arl.name if self.arl else None,
-            'estudios': self.estudios,
-            'estado_civil_id': self.estado_civil_id,
-            'estado_civil': self.estado_civil.name if self.estado_civil else None,
-            'hijos': self.hijos,
+            'studies': self.studies,
+            'marital_status_id': self.marital_status_id,
+            'marital_status': self.marital_status.name if self.marital_status else None,
+            'children': self.children,
             'is_active': self.is_active,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,

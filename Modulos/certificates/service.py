@@ -61,7 +61,7 @@ class CertificateService:
         template = cert_type.template
 
         # 3. Obtener los datos del empleado
-        employee = EmployeeRepository.get_by_identificacion(subject_id)
+        employee = EmployeeRepository.get_by_identification(subject_id)
         if not employee:
             raise NotFound("No se encontró un empleado con la identificación proporcionada.")
 
@@ -71,12 +71,12 @@ class CertificateService:
             raise NotFound("No se encontró un agente con la identificación proporcionada.")
         
         # 4. Reemplazar las variables en la plantilla
-        content = template.replace('{{ nombre_empleado }}', employee.nombre or '')
-        content = content.replace('{{ identificacion_empleado }}', str(employee.identificacion) or '')
-        content = content.replace('{{ fecha_inicio_trabajo }}', str(employee.fecha_ingreso) or '')
-        content = content.replace('{{ cargo_empleado }}', employee.cargo.name if employee.cargo else '')
+        content = template.replace('{{ nombre_empleado }}', employee.name or '')
+        content = content.replace('{{ identificacion_empleado }}', str(employee.identification) or '')
+        content = content.replace('{{ fecha_inicio_trabajo }}', str(employee.entry_date) or '')
+        content = content.replace('{{ cargo_empleado }}', employee.position.name if employee.position else '')
         content = content.replace('{{ fecha_emision }}', datetime.now().strftime('%d de %B de %Y'))
-        content = content.replace('{{ nombre_firmante }}', agent.nombre or '')
+        content = content.replace('{{ nombre_firmante }}', agent.name or '')
         # 5. Generar PDF a partir del HTML
         pdf_path = PDFGenerator.html_to_pdf(content)
 
@@ -84,9 +84,9 @@ class CertificateService:
         new_cert_data = {
             'certificate_type_id': cert_type_id,
             'created_by': data.get('created_by'),
-            'subject_name': employee.nombre,
-            'subject_identificacion': employee.identificacion,
-            'subject_email': employee.correo,
+            'subject_name': employee.name,
+            'subject_identificacion': employee.identification,
+            'subject_email': employee.email,
             'certificate_content': content,     
             'pdf_path': pdf_path                 
         }
