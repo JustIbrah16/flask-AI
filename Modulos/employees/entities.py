@@ -15,6 +15,7 @@ class EmployeeBaseEntity(Schema):
 # RESUMEN
 # ============================================================
 class EmployeeBriefEntity(Schema):
+    id = fields.Int()
     name = fields.Str()
     identification = fields.Int()
     boss_id = fields.Int()

@@ -85,6 +85,7 @@ def map_create(emp):
     }
 def map_brief(emp):
     return {
+        "id": emp.id,
         "name": emp.name,
         "identification": emp.identification,
         "boss_id": emp.boss_id,
