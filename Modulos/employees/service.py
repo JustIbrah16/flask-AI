@@ -88,7 +88,7 @@ def map_brief(emp):
         "id": emp.id,
         "name": emp.name,
         "identification": emp.identification,
-        "boss_id": emp.boss_id,
+        "boss_id": emp.boss_id if emp.boss_id else None,
         "is_active": "activo" if emp.is_active else "inactivo",
         "position": emp.position.name if emp.position else None, 
         "project": emp.project.name if emp.project else None
