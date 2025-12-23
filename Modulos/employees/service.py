@@ -269,7 +269,7 @@ class EmployeeService:
     @staticmethod
     def get_employees_with_delegar_jefe():
         """Obtiene todos los empleados que tienen permisos para delegar jefe"""
-        emps = EmployeeRepository.get_employees_with_is_boss()
+        emps = EmployeeRepository.get_employees_with_delegar_jefe()
         return EmployeeDetailEntity(many=True).dump(
             [map_jefes(e) for e in emps]
         )
