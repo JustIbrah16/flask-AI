@@ -63,7 +63,6 @@ class EmailTemplates:
                     margin: 30px 0;
                     padding: 25px;
                     background-color: #f3f4f6;
-                    border-left: 4px solid #4f46e5;
                     border-radius: 8px;
                 }}
                 .section-title {{
@@ -75,39 +74,39 @@ class EmailTemplates:
                     letter-spacing: 1.2px;
                 }}
                 .credentials-box {{
-                    background-color: #ffffff;
+                    background-color: transparent;
                     padding: 0;
-                    border-radius: 6px;
+                    border-radius: 0;
                     margin: 15px 0;
                 }}
                 .credential-item {{
-                    margin: 12px 0;
-                    padding: 14px 16px;
-                    background-color: #f9fafb;
-                    border-radius: 6px;
-                    border-left: 3px solid #5b21b6;
+                    margin: 8px 0;
+                    padding: 0;
+                    background-color: transparent;
+                    border-radius: 0;
+                    border-left: none;
                 }}
                 .credential-item:last-child {{
                     margin-bottom: 0;
                 }}
                 .credential-label {{
-                    font-size: 11px;
+                    font-size: 12px;
                     color: #6b7280;
                     text-transform: uppercase;
                     font-weight: 700;
-                    margin-bottom: 6px;
+                    margin-bottom: 4px;
                     letter-spacing: 0.5px;
                 }}
                 .credential-value {{
-                    font-size: 16px;
+                    font-size: 15px;
                     color: #111827;
-                    font-family: 'Courier New', monospace;
-                    font-weight: 600;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    font-weight: 500;
                     word-break: break-all;
-                    background-color: #f3f4f6;
-                    padding: 10px 12px;
-                    border-radius: 4px;
-                    letter-spacing: 0.3px;
+                    background-color: transparent;
+                    padding: 4px 0;
+                    border-radius: 0;
+                    letter-spacing: 0.2px;
                 }}
                 .button-container {{
                     text-align: center;
@@ -293,7 +292,6 @@ class EmailTemplates:
                     margin: 30px 0;
                     padding: 25px;
                     background-color: #f3f4f6;
-                    border-left: 4px solid #4f46e5;
                     border-radius: 8px;
                 }}
                 .section-title {{
@@ -305,32 +303,32 @@ class EmailTemplates:
                     letter-spacing: 1.2px;
                 }}
                 .password-box {{
-                    background-color: #ffffff;
-                    padding: 25px;
-                    border-radius: 6px;
+                    background-color: transparent;
+                    padding: 0;
+                    border-radius: 0;
                     margin: 15px 0;
-                    text-align: center;
-                    border: 2px dashed #4f46e5;
+                    text-align: left;
+                    border: none;
                 }}
                 .password-label {{
-                    font-size: 12px;
+                    font-size: 11px;
                     color: #6b7280;
                     text-transform: uppercase;
                     font-weight: 700;
-                    margin-bottom: 12px;
+                    margin-bottom: 4px;
                     display: block;
                     letter-spacing: 0.5px;
                 }}
                 .password-value {{
-                    font-size: 22px;
-                    color: #4f46e5;
-                    font-family: 'Courier New', monospace;
-                    font-weight: 700;
-                    padding: 15px;
-                    background-color: #f9fafb;
-                    border-radius: 6px;
+                    font-size: 15px;
+                    color: #111827;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    font-weight: 500;
+                    padding: 4px 0;
+                    background-color: transparent;
+                    border-radius: 0;
                     word-break: break-all;
-                    letter-spacing: 0.3px;
+                    letter-spacing: 0.2px;
                 }}
                 .button-container {{
                     text-align: center;

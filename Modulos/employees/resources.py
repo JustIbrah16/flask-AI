@@ -108,7 +108,6 @@ class EmployeeUpdatePassword(Resource):
             return {"message": "Contraseña no proporcionada"}, 400
 
         result = EmployeeService.update_password(emp_id, password)
-        # result expected as dict: {"success": bool, "message": str, "status": int(optional)}
         if not isinstance(result, dict):
             return {"message": "Error inesperado al actualizar contraseña"}, 500
 
