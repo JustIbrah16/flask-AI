@@ -3,8 +3,8 @@ from Modulos.employees.models import Employee
 from Modulos.employees.entities import  EmployeeBriefEntity, EmployeeDetailEntity, EmployeeCreateEntity, EmployeeUpdateEntity
 import random
 import string
-from extensions import mail
-from flask_mail import Message
+import re
+from email_service import EmailService
 from flask import current_app
 
 
@@ -111,9 +111,28 @@ def map_jefes(emp):
 # ============================================================
 class passwordGenerator:
     @staticmethod
-    def generar_password_temporal(longitud=6):
-        caracteres = string.ascii_letters + string.digits
-        return ''.join(random.choice(caracteres) for _ in range(longitud))
+    def generar_password_temporal(longitud=8):
+        if longitud < 8:
+            longitud = 8
+
+        # Caracteres permitidos
+        all_chars = string.ascii_letters + string.digits + string.punctuation
+
+        # Asegurar al menos un carácter de cada tipo
+        password_chars = [
+            random.choice(string.ascii_uppercase),
+            random.choice(string.ascii_lowercase),
+            random.choice(string.digits),
+            random.choice(string.punctuation),
+        ]
+
+        # Rellenar el resto
+        remaining = longitud - len(password_chars)
+        password_chars += [random.choice(all_chars) for _ in range(remaining)]
+
+        # Mezclar y devolver
+        random.shuffle(password_chars)
+        return ''.join(password_chars)
 
 class EmployeeService:
 
@@ -195,32 +214,13 @@ class EmployeeService:
         emp.set_password(password_temp)
         EmployeeRepository.update(emp)
 
-
-        try:
-         
-            email_destinatario = emp.email
-            username = emp.username 
-
-            msg = Message(
-                subject="Bienvenido a la Plataforma - Tus Credenciales",
-                recipients=[email_destinatario],
-                sender='lfdelahozfontalvo@gmail.com'
-            )
-            
-            msg.body = f"""
-            Hola {emp.name},
-            
-            Se ha creado tu cuenta en la plataforma. Estas son tus credenciales de acceso:
-            
-            Usuario: {username}
-            Contraseña: {password_temp}
-            
-            Por seguridad, te recomendamos cambiar tu contraseña al ingresar.
-            """
-            mail.send(msg)
-            
-        except Exception as e:
-            print(f"Error enviando correo: {str(e)}")
+        # Enviar correo con credenciales
+        EmailService.send_credentials_email(
+            email_destinatario=emp.email,
+            username=emp.username,
+            password_temp=password_temp,
+            employee_name=emp.name
+        )
 
         response = map_create(emp)
         response["password"] = password_temp
@@ -235,8 +235,23 @@ class EmployeeService:
         if not emp:
             return None
 
-        if len(password) < 6:
-            raise ValueError("La contraseña debe tener al menos 6 caracteres")
+        # Validaciones de seguridad: mínimo 8, al menos una mayúscula, una minúscula,
+        # al menos un número y al menos un símbolo.
+        if len(password) < 8:
+            raise ValueError("La contraseña debe tener al menos 8 caracteres")
+
+        if not re.search(r"[A-Z]", password):
+            raise ValueError("La contraseña debe contener al menos una letra mayúscula")
+
+        if not re.search(r"[a-z]", password):
+            raise ValueError("La contraseña debe contener al menos una letra minúscula")
+
+        if not re.search(r"\d", password):
+            raise ValueError("La contraseña debe contener al menos un número")
+
+        # símbolo: carácter no alfanumérico ni espacio
+        if not re.search(r"[^A-Za-z0-9\s]", password):
+            raise ValueError("La contraseña debe contener al menos un símbolo (carácter especial)")
 
         if emp.temp_pass != 1:
             raise ValueError("La contraseña no es temporal, no se puede actualizar de esta forma")

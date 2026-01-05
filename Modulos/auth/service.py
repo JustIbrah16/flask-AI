@@ -1,9 +1,7 @@
 from Modulos.employees.repository import EmployeeRepository
 from Modulos.employees.service import passwordGenerator
 from werkzeug.security import check_password_hash
-from extensions import mail
-from flask_mail import Message
-from flask import current_app
+from email_service import EmailService
 
 
 class AuthService:
@@ -28,26 +26,11 @@ class AuthService:
         user.temp_pass = 1
         EmployeeRepository.update(user)
 
-        try:
-            email_destinatario = user.email
-            msg = Message(
-                subject="Recuperación de Contraseña",
-                recipients=[email_destinatario],
-                sender='lfdelahozfontalvo@gmail.com'
-            )
-
-            msg.body = f"""
-            Hola {user.name},
-            
-            Se ha generado una nueva contraseña temporal para tu cuenta:
-            
-            Contraseña temporal: {password_temp}
-            
-            Por seguridad, te recomendamos cambiar tu contraseña al ingresar.
-            """
-            mail.send(msg)
-
-        except Exception as e:
-            print(f"Error enviando correo: {str(e)}")
+        # Enviar correo de recuperación de contraseña
+        EmailService.send_password_recovery_email(
+            email_destinatario=user.email,
+            password_temp=password_temp,
+            employee_name=user.name
+        )
 
         return user
