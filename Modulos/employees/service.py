@@ -233,33 +233,30 @@ class EmployeeService:
     def update_password(id, password):
         emp = EmployeeRepository.get_by_id(id)
         if not emp:
-            return None
+              return {"success": False, "message": "Empleado no encontrado", "status": 404}
 
-        # Validaciones de seguridad: mínimo 8, al menos una mayúscula, una minúscula,
-        # al menos un número y al menos un símbolo.
         if len(password) < 8:
-            raise ValueError("La contraseña debe tener al menos 8 caracteres")
+              return {"success": False, "message": "La contraseña debe tener al menos 8 caracteres", "status": 400}
 
         if not re.search(r"[A-Z]", password):
-            raise ValueError("La contraseña debe contener al menos una letra mayúscula")
+              return {"success": False, "message": "La contraseña debe contener al menos una letra mayúscula", "status": 400}
 
         if not re.search(r"[a-z]", password):
-            raise ValueError("La contraseña debe contener al menos una letra minúscula")
+              return {"success": False, "message": "La contraseña debe contener al menos una letra minúscula", "status": 400}
 
         if not re.search(r"\d", password):
-            raise ValueError("La contraseña debe contener al menos un número")
+              return {"success": False, "message": "La contraseña debe contener al menos un número", "status": 400}
 
-        # símbolo: carácter no alfanumérico ni espacio
         if not re.search(r"[^A-Za-z0-9\s]", password):
-            raise ValueError("La contraseña debe contener al menos un símbolo (carácter especial)")
+              return {"success": False, "message": "La contraseña debe contener al menos un símbolo (carácter especial)", "status": 400}
 
         if emp.temp_pass != 1:
-            raise ValueError("La contraseña no es temporal, no se puede actualizar de esta forma")
+              return {"success": False, "message": "La contraseña no es temporal, no se puede actualizar de esta forma", "status": 400}
 
         emp.set_password(password)
         emp.temp_pass = 0 
         EmployeeRepository.update(emp)
-        return True
+        return {"success": True, "message": "Contraseña actualizada correctamente"}
 
         
 

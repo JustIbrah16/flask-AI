@@ -107,11 +107,15 @@ class EmployeeUpdatePassword(Resource):
         if not password:
             return {"message": "Contraseña no proporcionada"}, 400
 
-        success = EmployeeService.update_password(emp_id, password)
-        if not success:
-            return {"message": "Empleado no encontrado"}, 404
+        result = EmployeeService.update_password(emp_id, password)
+        # result expected as dict: {"success": bool, "message": str, "status": int(optional)}
+        if not isinstance(result, dict):
+            return {"message": "Error inesperado al actualizar contraseña"}, 500
 
-        return {"message": "Contraseña actualizada correctamente"}, 200
+        if not result.get("success"):
+            return {"message": result.get("message", "No se pudo actualizar la contraseña")}, result.get("status", 400)
+
+        return {"message": result.get("message", "Contraseña actualizada correctamente")}, 200
 
 
 
