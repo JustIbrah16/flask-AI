@@ -117,7 +117,7 @@ class EmailTemplates:
                     display: inline-block;
                     padding: 14px 40px;
                     background: linear-gradient(135deg, #4f46e5 0%, #5b21b6 100%);
-                    color: #ffffff;
+                    color: white;
                     text-decoration: none;
                     border-radius: 8px;
                     font-weight: 700;
@@ -340,7 +340,7 @@ class EmailTemplates:
                     display: inline-block;
                     padding: 14px 40px;
                     background: linear-gradient(135deg, #4f46e5 0%, #5b21b6 100%);
-                    color: #ffffff;
+                    color: white;
                     text-decoration: none;
                     border-radius: 8px;
                     font-weight: 700;
