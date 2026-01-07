@@ -33,7 +33,7 @@ def map_detail(emp):
         "salary": emp.salary,
         "entry_date": emp.entry_date,
         "project": emp.project.name if emp.project else None,
-        "state": "activo" if emp.is_active else "inactivo",
+        "state_employe": emp.state_employe.name if emp.state_employe else None,
         "gender": emp.gender.name if emp.gender else None,
         "shirt_size": emp.shirt_size.name if emp.shirt_size else None,
         "pants_size": emp.pants_size,
@@ -78,6 +78,7 @@ def map_create(emp):
         "eps_id": emp.eps_id,
         "arl_id": emp.arl_id,
         "studies": emp.studies,
+
         "marital_status_id": emp.marital_status_id,
         "children": emp.children,
         "username": emp.username,

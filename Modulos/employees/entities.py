@@ -66,7 +66,7 @@ class EmployeeDetailEntity(Schema):
 
     marital_status = fields.Str(allow_none=True)
     children = fields.Int(allow_none=True)
-
+    state_employe = fields.Str(allow_none=True)
     username = fields.Str()
     is_active = fields.Int()
 
@@ -118,7 +118,7 @@ class EmployeeCreateEntity(Schema):
     children = fields.Int()
 
     contract_type_id = fields.Int()
-
+    state_employe_id = fields.Int(load_default=1)
     is_active = fields.Int(load_default=1)
     temp_pass = fields.Int()
     password = fields.Str() 
@@ -128,13 +128,42 @@ class EmployeeCreateEntity(Schema):
 # UPDATE
 # ============================================================
 class EmployeeUpdateEntity(Schema):
+    # Allow updating any of these fields optionally (partial updates supported)
     name = fields.Str(allow_none=True)
-    email = fields.Str(allow_none=True)  # cambiamos de Email a Str
+    identification = fields.Int(allow_none=True)
+    email = fields.Str(allow_none=True)  # kept as Str to allow partial empty
     phone = fields.Int(allow_none=True)
     address = fields.Str(allow_none=True)
-    salary = fields.Float(allow_none=True)
-    boss_id = fields.Str(allow_none=True)
+    city_id = fields.Int(allow_none=True)
+    position_id = fields.Int(allow_none=True)
+    area_id = fields.Int(allow_none=True)
+    role_id = fields.Int(allow_none=True)
     project_id = fields.Int(allow_none=True)
+
+    is_boss = fields.Int(allow_none=True)
+    boss_id = fields.Int(allow_none=True)
+    salary = fields.Float(allow_none=True)
+
+    bank_id = fields.Int(allow_none=True)
+    account_number = fields.Int(allow_none=True)
+
+    gender_id = fields.Int(allow_none=True)
+    shirt_size_id = fields.Int(allow_none=True)
+    coat_size_id = fields.Int(allow_none=True)
+    pants_size = fields.Int(allow_none=True)
+    shoes_size = fields.Int(allow_none=True)
+
+    eps_id = fields.Int(allow_none=True)
+    arl_id = fields.Int(allow_none=True)
+    studies = fields.Str(allow_none=True)
+
+    marital_status_id = fields.Int(allow_none=True)
+    children = fields.Int(allow_none=True)
+
+    contract_type_id = fields.Int(allow_none=True)
+    state_employe_id = fields.Int(allow_none=True)
+    is_active = fields.Int(allow_none=True)
+    username = fields.Str(allow_none=True)
 
     @validates("email")
     def validate_email(self, value):

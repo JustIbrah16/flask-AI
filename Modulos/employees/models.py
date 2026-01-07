@@ -57,7 +57,7 @@ class Employee(db.Model):
     entry_date = db.Column(db.Date)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
     project = db.relationship('Project', backref='employees')
-    state_employe_id = db.Column(db.Integer, db.ForeignKey('state_employe.id'))
+    state_employe_id = db.Column(db.Integer, db.ForeignKey('state_employe.id'), default=1)
     state_employe = db.relationship('StateEmploye', backref='employees')
     gender_id = db.Column(db.Integer, db.ForeignKey('genders.id'))
     gender = db.relationship('Gender', backref='employees')

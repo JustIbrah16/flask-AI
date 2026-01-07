@@ -58,13 +58,44 @@ employee_create_model = employees_ns.model("EmployeeCreate", {
 })
 
 employee_update_model = employees_ns.model("EmployeeUpdate", {
-    "name": fields.String,
-    "email": fields.String,
+    "name": fields.String(required=False),
+    "identification": fields.Integer(required=False),
+    "email": fields.String(required=False),
+
+    "username": fields.String(required=False),
+
     "phone": fields.Integer,
     "address": fields.String,
-    "salary": fields.Float,
+
+    "city_id": fields.Integer,
+    "position_id": fields.Integer,
+    "area_id": fields.Integer,
+    "role_id": fields.Integer,
+    "project_id": fields.Integer,
+
+    "is_boss": fields.Integer,
     "boss_id": fields.Integer,
-    "project_id": fields.Integer
+    "salary": fields.Float,
+
+    "bank_id": fields.Integer,
+    "account_number": fields.Integer,
+
+    "gender_id": fields.Integer,
+    "shirt_size_id": fields.Integer,
+    "coat_size_id": fields.Integer,
+    "shoes_size": fields.Integer,
+    "studies": fields.String,
+    "pants_size": fields.Integer,
+    "entry_date": fields.Date,
+    "date_of_birth": fields.Date,
+
+    "eps_id": fields.Integer,
+    "arl_id": fields.Integer,
+
+    "marital_status_id": fields.Integer,
+    "children": fields.Integer,
+    "state_employe_id": fields.Integer,
+    "contract_type_id": fields.Integer
 })
 
 # =======================
@@ -167,7 +198,7 @@ class EmployeeById(Resource):
             return {"message": "Empleado no encontrado"}, 404
         return {"data": emp}, 200
 
-    @employees_ns.expect(employee_create_model, validate=True)
+    @employees_ns.expect(employee_update_model, validate=False)
     def put(self, emp_id):
         data = request.get_json()
 
