@@ -147,7 +147,7 @@ class EmployeeById(Resource):
             return {"message": "Empleado no encontrado"}, 404
         return {"data": emp}, 200
 
-    @employees_ns.expect(employee_update_model, validate=True)
+    @employees_ns.expect(employee_create_model, validate=True)
     def put(self, emp_id):
         data = request.get_json()
 

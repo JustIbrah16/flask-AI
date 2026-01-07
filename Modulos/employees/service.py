@@ -176,7 +176,7 @@ class EmployeeService:
         emp = EmployeeRepository.get_by_id(emp_id)
         if not emp:
             return None
-        return EmployeeDetailEntity().dump(map_detail(emp))
+        return EmployeeCreateEntity().dump(map_create(emp))
 
     @staticmethod
     def get_by_identification(identification):
@@ -267,7 +267,7 @@ class EmployeeService:
         if not emp:
             return None
             
-        valid = EmployeeUpdateEntity().load(data, partial=True)
+        valid = EmployeeCreateEntity().load(data, partial=True)
 
             
         for k, v in valid.items():
