@@ -85,6 +85,12 @@ CREATE TABLE IF NOT EXISTS `arl_providers` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `state_employe` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(120) NOT NULL UNIQUE,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Tabla employees con referencias a las tablas maestras (campos *_id)
 CREATE TABLE IF NOT EXISTS `employees` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -105,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `salario` FLOAT,
   `fecha_ingreso` DATE,
   `proyecto_id` INT,
-  `estado` VARCHAR(20) DEFAULT 'activo',
+  `state_employee_id` VARCHAR(20) DEFAULT 'activo',
   `genero_id` INT,
   `camisa_id` INT,
   `pantalon` INT,
@@ -138,7 +144,8 @@ CREATE TABLE IF NOT EXISTS `employees` (
   CONSTRAINT `fk_employees_abrigo_sizes` FOREIGN KEY (`abrigo_id`) REFERENCES `sizes` (`id`),
   CONSTRAINT `fk_employees_eps_providers` FOREIGN KEY (`eps_id`) REFERENCES `eps_providers` (`id`),
   CONSTRAINT `fk_employees_arl_providers` FOREIGN KEY (`arl_id`) REFERENCES `arl_providers` (`id`),
-  CONSTRAINT `fk_employees_marital_statuses` FOREIGN KEY (`estado_civil_id`) REFERENCES `marital_statuses` (`id`)
+  CONSTRAINT `fk_employees_marital_statuses` FOREIGN KEY (`estado_civil_id`) REFERENCES `marital_statuses` (`id`),
+  CONSTRAINT `fk_employees_state` FOREIGN KEY (`state_employee_id`) REFERENCES `state_employe` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================================

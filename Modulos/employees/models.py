@@ -13,6 +13,7 @@ from Modulos.others.estado_civil.models import MaritalStatus
 from Modulos.others.generos.models import Gender
 from Modulos.others.proyectos.models import Project
 from Modulos.others.tallas.models import Size
+from Modulos.others.state_employe.models import StateEmploye
 
 
 
@@ -56,7 +57,8 @@ class Employee(db.Model):
     entry_date = db.Column(db.Date)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
     project = db.relationship('Project', backref='employees')
-    state = db.Column(db.String(20), default='activo')  # activo, inactivo, licencia
+    state_employe_id = db.Column(db.Integer, db.ForeignKey('state_employe.id'))
+    state_employe = db.relationship('StateEmploye', backref='employees')
     gender_id = db.Column(db.Integer, db.ForeignKey('genders.id'))
     gender = db.relationship('Gender', backref='employees')
     shirt_size_id = db.Column(db.Integer, db.ForeignKey('sizes.id'))
@@ -117,7 +119,8 @@ class Employee(db.Model):
             'entry_date': self.entry_date.isoformat() if self.entry_date else None,
             'project_id': self.project_id,
             'project': self.project.name if self.project else None,
-            'state': self.state,
+            'state_employe_id': self.state_employe_id,
+            'state_employe': self.state_employe.name if self.state_employe else None,
             'gender_id': self.gender_id,
             'gender': self.gender.name if self.gender else None,
             'shirt_size_id': self.shirt_size_id,

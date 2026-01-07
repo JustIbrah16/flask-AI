@@ -258,8 +258,18 @@ class EmployeeService:
         EmployeeRepository.update(emp)
         return {"success": True, "message": "Contraseña actualizada correctamente"}
 
+    @staticmethod
+    def update_state(emp_id, state_employe_id):
+        emp = EmployeeRepository.get_by_id(emp_id)
+        if not emp:
+            return {"success": False, "message": "Empleado no encontrado", "status": 404}
         
-
+        if not state_employe_id:
+            return {"success": False, "message": "El ID del estado no puede estar vacío", "status": 400}
+        
+        emp.state_employe_id = state_employe_id
+        EmployeeRepository.update(emp)
+        return {"success": True, "message": "Estado del empleado actualizado correctamente"}
 
     @staticmethod
     def update(emp_id, data):

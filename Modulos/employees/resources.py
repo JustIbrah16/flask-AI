@@ -12,6 +12,10 @@ employees_ns = Namespace("employees", description="Gestión de empleados")
 password_model = employees_ns.model('UpdatePassword', {
     'password': fields.String(required=True, description='La nueva contraseña del empleado')
 })
+
+state_employe_model = employees_ns.model('UpdateStateEmploye', {
+    'state_employe_id': fields.Integer(required=True, description='El ID del estado del empleado')
+})
 employee_create_model = employees_ns.model("EmployeeCreate", {
     "name": fields.String(required=True),
     "identification": fields.Integer(required=True),
@@ -117,6 +121,22 @@ class EmployeeUpdatePassword(Resource):
         return {"message": result.get("message", "Contraseña actualizada correctamente")}, 200
 
 
+@employees_ns.route("/update-state/<int:emp_id>")
+class EmployeeUpdateState(Resource):
+    @employees_ns.expect(state_employe_model)
+    def put(self, emp_id):
+        """Actualiza el estado del empleado (activo, inactivo, licencia, etc.)"""
+        data = request.get_json()
+        state_employe_id = data.get("state_employe_id")
+        
+        if not state_employe_id:
+            return {"message": "El ID del estado no fue proporcionado"}, 400
+
+        result = EmployeeService.update_state(emp_id, state_employe_id)
+        if not result.get("success"):
+            return {"message": result.get("message", "No se pudo actualizar el estado")}, result.get("status", 400)
+
+        return {"message": result.get("message", "Estado actualizado correctamente")}, 200
 
 
 @employees_ns.route("/count")

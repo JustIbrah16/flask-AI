@@ -8,7 +8,7 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
         load_instance = True
         include_fk = True
         # Excluir las relaciones del auto-schema para evitar problemas de serialización
-        exclude = ('city', 'position', 'area', 'contract_type', 'bank', 'project', 'gender', 'shirt_size', 'coat_size', 'eps', 'marital_status', 'role')
+        exclude = ('city', 'position', 'area', 'contract_type', 'bank', 'project', 'gender', 'shirt_size', 'coat_size', 'eps', 'marital_status', 'role', 'state_employe')
     
     # ========================================================================
     # Orden según tabla employees en database_schema.sql
@@ -49,7 +49,8 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
     entry_date = fields.Date(allow_none=True)
     project_id = fields.Integer(allow_none=True)
     project = fields.Function(lambda obj: obj.project.name if obj.project else None, dump_only=True)
-    state = fields.Str(allow_none=True)
+    state_employe_id = fields.Integer(allow_none=True)
+    state_employe = fields.Function(lambda obj: obj.state_employe.name if obj.state_employe else None, dump_only=True)
     gender_id = fields.Integer(allow_none=True)
     gender = fields.Function(lambda obj: obj.gender.name if obj.gender else None, dump_only=True)
     

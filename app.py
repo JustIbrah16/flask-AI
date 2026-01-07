@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restx import Api
 from config import Config
-from extensions import db, migrate, jwt, mail 
+from extensions import db, migrate, jwt, mail
 from flask_cors import CORS
 
 from Modulos.auth.routes import auth_ns
@@ -10,18 +10,19 @@ from Modulos.attendance.resources import attendance_ns
 from Modulos.vacations.resources import vacations_ns
 from Modulos.reports.resources import reports_ns
 from Modulos.certificates.resources import certificates_ns
-from Modulos.others.areas.resources import areas_ns         
-from Modulos.others.arl.resources import arl_ns              
-from Modulos.others.bancos.resources import bank_ns          
-from Modulos.others.cargos.resources import cargos_ns        
-from Modulos.others.ciudades.resources import cities_ns      
-from Modulos.others.contratos.resources import contract_types_ns 
-from Modulos.others.eps.resources import eps_ns              
-from Modulos.others.estado_civil.resources import marital_status_ns 
-from Modulos.others.generos.resources import genero_ns       
-from Modulos.others.proyectos.resources import proyectos_ns  
-from Modulos.others.tallas.resources import sizes_ns  
-from Modulos.roles.resources import roles_ns     
+from Modulos.others.areas.resources import areas_ns
+from Modulos.others.arl.resources import arl_ns
+from Modulos.others.bancos.resources import bank_ns
+from Modulos.others.cargos.resources import cargos_ns
+from Modulos.others.ciudades.resources import cities_ns
+from Modulos.others.contratos.resources import contract_types_ns
+from Modulos.others.eps.resources import eps_ns
+from Modulos.others.estado_civil.resources import marital_status_ns
+from Modulos.others.generos.resources import genero_ns
+from Modulos.others.proyectos.resources import proyectos_ns
+from Modulos.others.tallas.resources import sizes_ns
+from Modulos.roles.resources import roles_ns
+from Modulos.others.state_employe.resources import state_employes_ns
 
 
 def create_app(config_object=Config):
@@ -35,9 +36,7 @@ def create_app(config_object=Config):
     mail.init_app(app)
 
     # CORS CONFIG
-    CORS(app,
-         resources={r"/*": {"origins": Config.CORS_ORIGINS}},
-         supports_credentials=True)
+    CORS(app, resources={r"/*": {"origins": Config.CORS_ORIGINS}}, supports_credentials=True)
 
     # CREAR LA API
     api = Api(app)
@@ -52,14 +51,16 @@ def create_app(config_object=Config):
     api.add_namespace(areas_ns, path='/areas')
     api.add_namespace(arl_ns, path='/arl')
     api.add_namespace(bank_ns, path='/banks')
-    api.add_namespace(cargos_ns, path='/positions') 
+    api.add_namespace(cargos_ns, path='/positions')
     api.add_namespace(cities_ns, path='/cities')
     api.add_namespace(contract_types_ns, path='/contract-types')
     api.add_namespace(eps_ns, path='/eps')
     api.add_namespace(marital_status_ns, path='/marital-statuses')
-    api.add_namespace(genero_ns, path='/genders') 
+    api.add_namespace(genero_ns, path='/genders')
     api.add_namespace(proyectos_ns, path='/projects')
     api.add_namespace(sizes_ns, path='/sizes')
+    api.add_namespace(state_employes_ns, path='/state-employes')
     api.add_namespace(roles_ns, path='/roles')
 
     return app
+
